@@ -1,0 +1,76 @@
+:root {
+    --color-1: #0B2545;
+    --color-2: #13315C;
+    --color-3: #134074;
+    --color-4: #8DA9C4;
+    --color-5: #EEf4ED;
+}
+
+.center {
+    margin: auto;
+    width: 75%;
+}
+
+.plotting {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    display: flex;
+}
+
+.config-table-area {
+    margin-bottom: 5vh;
+    margin-top: 2vh;
+}
+
+.graph-config {
+    border: solid;
+    border-width: 1px;
+    border-color: var(--color-3);
+    padding: 1vh;
+}
+
+.table-control {
+    border: solid;
+    border-width: 1px;
+    padding: 1vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    border-color: var(--color-4);
+}
+
+th {
+    cursor: pointer;
+    background-color: var(--color-3);
+    color: white;
+    margin-top: 2%;
+    position: sticky;
+    top: 0;
+}
+
+th:hover{
+    background-color: var(--color-1);
+}
+
+.selection-button {
+    font-size: 15px;
+}
+
+.region-button:hover{
+    background-color: var(--color-5);
+}
+
+.region-button-clicked {
+    background-color: var(--color-4);
+    color: white;
+}
+
+table {
+    border-spacing: 0;
+}
+
+th, td {
+    padding: 5px;
+    border-bottom: solid;
+    border-width: 0.5px;
+    border-color: var(--color-5);
+}
