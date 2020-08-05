@@ -43,7 +43,7 @@ function drawBarPie(data, barID, barName, pieID, pieName) {
 
     pieGraph = new PieGraph(pieID, tabularData, 0, 1);
     pieGraph.setLayout({'title': pieName});
-    pieControl = new PieControl(pieGraph, tabularData, 8);
+    pieControl = new PieControl(pieGraph, tabularData, 10);
     pieControl.updateAndDisplay();
 
     barGraph = new BarGraph(barID, tabularData, 0, 1);
@@ -88,5 +88,10 @@ function drawSummaryTable(dataCollection, tableID) {
     addFilterButton.onclick = function () {
         tableFilter.makeControlArea();
     }
+    tableFilter.makeControlArea();
 }
 
+
+//window.addEventListener('resize', function() {
+//    location.reload();
+//})

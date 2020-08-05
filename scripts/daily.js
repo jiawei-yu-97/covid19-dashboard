@@ -1,8 +1,6 @@
 const latestDate = getLastItem(dataCollection['confirmed']['date']);
 
 addTextToElement(document.getElementById('footer-1'), "As of " + latestDate);
-addTextToElement(document.getElementById('footer-2'), 'Data from https://data.humdata.org/ - \
-Centre for Humanitarian Data of the UN.');
 addTextToElement(document.getElementById('footer-3'), 
     'Data may be inaccurate. \
     Some countries do not report recovery numbers or experience significant delays in reporting, \
@@ -52,5 +50,3 @@ drawLineGraph(dataCollection['active'],
     'active-cases-smoothing',
     'active-cases-log',
     'active-cases-clear');
-
-

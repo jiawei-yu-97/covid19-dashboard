@@ -1,7 +1,5 @@
 const latestDate = getLastItem(dataCollection['confirmed']['date']);
 addTextToElement(document.getElementById('footer-1'), "As of " + latestDate);
-addTextToElement(document.getElementById('footer-2'), 'Data from https://data.humdata.org/ - \
-Centre for Humanitarian Data of the UN.');
 addTextToElement(document.getElementById('footer-3'), 'Some countries do not report recovery figures.');
 
 document.getElementById('header-1').innerText = 'All Confirmed Cases';
