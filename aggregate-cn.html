@@ -43,6 +43,28 @@
     </section>
 
     <section class='bottom-border'>
+        <h1 class='text-center' id='header-3'></h1>
+        <div class='text-center text-italics' id='footer-3'></div>
+
+        <section class='flex-display center config-table-area'>
+            <div class='graph-config', id='summary-table-config'>
+                <h4 style='text-align: center;'>数据筛选</h4>
+                <div>
+                    <button class='selection-button' id='add-table-filter'>增加条件</button>
+                </div>
+                
+            </div>
+
+            <div class='table-area scroll-y height480'>
+                <table class='regions-table' id='summary-table'></table>
+            </div>
+            
+        </section>
+    </section>
+
+    <br>
+
+    <section class='bottom-border'>
         <h1 class='text-center' id='header-1'></h1>
 
         <section class='plotting flex-display'>
@@ -64,7 +86,7 @@
                         </div>
 
                         <br>
-                        <div style='font-size:small'>数据筛选</div>
+                        <div style='font-size:small'>数据筛选(点击国家以加入对比图)</div>
                     </div>
 
                     <div class='table-area scroll-y height320'>
@@ -81,7 +103,7 @@
 
     <br>
 
-    <section class='bottom-border'>
+    <section>
         <h1 class='text-center' id='header-2'></h1>
 
         <section class='plotting flex-display'>
@@ -103,7 +125,7 @@
                         </div>
 
                         <br>
-                        <div style='font-size:small'>数据筛选</div>
+                        <div style='font-size:small'>数据筛选(点击国家以加入对比图)</div>
                     </div>
 
                     <div class='table-area scroll-y height320'>
@@ -115,28 +137,6 @@
             </div>
             
             <div class='flex-grow' id='deaths-cases-lines'></div>
-        </section>
-    </section>
-
-    <br>
-
-    <section>
-        <h1 class='text-center' id='header-3'></h1>
-        <div class='text-center text-italics' id='footer-3'></div>
-
-        <section class='flex-display center config-table-area'>
-            <div class='graph-config', id='summary-table-config'>
-                <h4 style='text-align: center;'>数据筛选</h4>
-                <div>
-                    <button class='selection-button' id='add-table-filter'>增加条件</button>
-                </div>
-                
-            </div>
-
-            <div class='table-area scroll-y height480'>
-                <table class='regions-table' id='summary-table'></table>
-            </div>
-            
         </section>
     </section>
 
