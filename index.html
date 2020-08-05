@@ -3,21 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Visualizing COVID-19 data on number of confirmed, death and recovered cases.">
-    <meta name="keywords" content="COVID-19, Coronavirus">
+    <meta name="description" content="Interactive COVID19 data visualization and comparison.">
+    <meta name="keywords" content="COVID-19, COVID19, Coronavirus, dashboard, visualization">
     <meta name="author" content="Jiawei Yu">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <script src="scripts/plotly-latest.min.js"></script>
-    <script src="scripts/helper-functions.js" defer></script>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-    <script src="scripts/data.js" defer></script>
-    <script src="scripts/view.js" defer></script>
-    <script src="scripts/control.js" defer></script>
+    <script src="scripts/en/plotly-latest.min.js"></script>
+    <script src="scripts/en/helper-functions.js" defer></script>
+
+    <script src="scripts/en/data.js" defer></script>
+    <script src="scripts/en/view.js" defer></script>
+    <script src="scripts/en/control.js" defer></script>
 
     <script src="data/data-collection.js" defer></script>
-    <script src="scripts/functions.js" defer></script>
-    <script src="scripts/aggregate.js" defer></script>
+    <script src="scripts/en/functions.js" defer></script>
+    <script src="scripts/en/aggregate.js" defer></script>
     <title>COVID Dashboard - Aggregate Data</title>
 </head>
 
@@ -36,26 +36,26 @@
     <section>
         <h1>COVID-19: Interactive Data Visualization - Comparing Global Performance</h1>
         <div class='text-center text-italics' id='footer-1'></div>
-        <div class='text-center text-italics' id='footer-2'></div>
+        <div class='text-center text-italics'>
+            Data source: <a href='https://data.humdata.org/'>Centre for Humanitarian Data of the United Nations</a>
+        </div>
     </section>
 
     <section class='bottom-border'>
         <h1 class='text-center' id='header-1'></h1>
 
-        <section class='plotting height400'>
-            <div class='width50' id='all-cases-bar'></div>
-            <div class='width50' id='all-cases-pie'></div>
+        <section class='plotting flex-display'>
+            <div class='flex-grow' id='all-cases-bar'></div>
+            <div class='flex-grow' id='all-cases-pie'></div>
         </section>
 
-        <section class="plotting flex-display height500">
-            <div class='width75' id='all-cases-lines'></div>
-
-            <div class='select-area width25' id='all-cases-select'>
+        <section class="plotting flex-display">
+            <div id='all-cases-select'>
                 <div class='graph-config'>
                     <div class='graph-options' , id='all-cases-graph-options'>
                         <div>
                             <input type="checkbox" id="all-cases-log" name="all-cases-log">
-                            <label for="all-cases-log">Use Logarithmic Scale</label>
+                            <label for="all-cases-log">Use Log Scale</label>
                         </div>
 
                         <div id='all-cases-smoothing'>
@@ -66,13 +66,15 @@
                         <div style='font-size:small'>Data Filter</div>
                     </div>
 
-                    <div class='table-area scroll-y height300'>
+                    <div class='table-area scroll-y height320'>
                         <table class='regions-table' id='all-cases-table'>
                         </table>
                     </div>
                     <button class='selection-button' id='all-cases-clear'>Clear selection</button>
                 </div>
             </div>
+
+            <div class='flex-grow' id='all-cases-lines'></div>
         </section>
     </section>
 
@@ -81,20 +83,18 @@
     <section class='bottom-border'>
         <h1 class='text-center' id='header-2'></h1>
 
-        <section class='plotting height400'>
-            <div class='width50' id='deaths-cases-bar'></div>
-            <div class='width50' id='deaths-cases-pie'></div>
+        <section class='plotting flex-display'>
+            <div class='flex-grow' id='deaths-cases-bar'></div>
+            <div class='flex-grow' id='deaths-cases-pie'></div>
         </section>
 
-        <section class="plotting flex-display height500">
-            <div class='width75' id='deaths-cases-lines'></div>
-
-            <div class='select-area width25' id='deaths-cases-select'>
+        <section class="plotting flex-display">
+            <div class='select-area' id='deaths-cases-select'>
                 <div class='graph-config'>
                     <div class='graph-options' , id='deaths-cases-graph-options'>
                         <div>
                             <input type="checkbox" id="deaths-cases-log" name="deaths-cases-log">
-                            <label for="deaths-cases-log">Use Logarithmic Scale</label>
+                            <label for="deaths-cases-log">Use Log Scale</label>
                         </div>
 
                         <div id='deaths-cases-smoothing'>
@@ -105,13 +105,15 @@
                         <div style='font-size:small'>Data Filter</div>
                     </div>
 
-                    <div class='table-area scroll-y height300'>
+                    <div class='table-area scroll-y height320'>
                         <table class='regions-table' id='deaths-cases-table'>
                         </table>
                     </div>
                     <button class='selection-button' id='deaths-cases-clear'>Clear selection</button>
                 </div>
             </div>
+            
+            <div class='flex-grow' id='deaths-cases-lines'></div>
         </section>
     </section>
 
@@ -121,8 +123,8 @@
         <h1 class='text-center' id='header-3'></h1>
         <div class='text-center text-italics' id='footer-3'></div>
 
-        <section class='flex-display center config-table-area height500'>
-            <div class='graph-config width25', id='summary-table-config'>
+        <section class='flex-display center config-table-area'>
+            <div class='graph-config', id='summary-table-config'>
                 <h4 style='text-align: center;'>Data Filters</h4>
                 <div>
                     <button class='selection-button' id='add-table-filter'>Add Filter</button>
@@ -130,7 +132,7 @@
                 
             </div>
 
-            <div class='table-area width75 scroll-y'>
+            <div class='table-area scroll-y height480'>
                 <table class='regions-table' id='summary-table'></table>
             </div>
             

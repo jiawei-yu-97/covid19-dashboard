@@ -6,6 +6,7 @@
     --color-5: #EEf4ED;
 }
 
+
 body {
     background: white;
     color: var(--color-1);
@@ -38,13 +39,13 @@ li a{
     font-size: 20px;
 }
 
-a:link, a:visited{
+li a:link, li a:visited{
     color: white;
     background-color: transparent;
     text-decoration: none;
 }
 
-a:hover{
+li a:hover{
     background-color: var(--color-1);
 }
 
@@ -59,35 +60,28 @@ a:hover{
 
 .flex-display{
     display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.flex-grow{
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 320px;
 }
 
 .scroll-y {
     overflow-y: scroll;
 }
 
-.width25 {
-    width: 25%
+.height320 {
+    height: 320px;
 }
 
-.width50 {
-    width: 50%
+.height480 {
+    height: 480px;
 }
 
-.width75 {
-    width: 75%
-}
-
-.height300 {
-    height: 300px
-}
-
-.height400 {
-    height: 400px
-}
-
-.height500 {
-    height: 500px
-}
 
 .bottom-border{
     border-bottom: solid;

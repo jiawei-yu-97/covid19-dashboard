@@ -8,13 +8,12 @@
 
 .center {
     margin: auto;
-    width: 75%;
+    width: 90%;
 }
 
 .plotting {
     margin-top: 5vh;
     margin-bottom: 5vh;
-    display: flex;
 }
 
 .config-table-area {

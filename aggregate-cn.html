@@ -3,22 +3,22 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Interactive COVID19 data visualization and comparison.">
-    <meta name="keywords" content="COVID-19, COVID19, Coronavirus, dashboard, visualization">
-    <meta name="author" content="Jiawei Yu">
+    <meta name="description" content="动态图表详解新冠肺炎数据">
+    <meta name="keywords" content="COVID-19, COVID19, Coronavirus, dashboard, visualization,新冠肺炎,新冠,新型冠状肺炎,图表,可视化,数据">
+    <meta name="author" content="余嘉葳">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-    <script src="scripts/en/plotly-latest.min.js"></script>
-    <script src="scripts/en/helper-functions.js" defer></script>
+    <script src="scripts/cn/plotly-latest.min.js"></script>
+    <script src="scripts/cn/helper-functions.js" defer></script>
 
-    <script src="scripts/en/data.js" defer></script>
-    <script src="scripts/en/view.js" defer></script>
-    <script src="scripts/en/control.js" defer></script>
+    <script src="scripts/cn/data.js" defer></script>
+    <script src="scripts/cn/view.js" defer></script>
+    <script src="scripts/cn/control.js" defer></script>
 
-    <script src="data/data-collection.js" defer></script>
-    <script src="scripts/en/functions.js" defer></script>
-    <script src="scripts/en/aggregate.js" defer></script>
-    <title>COVID Dashboard - Aggregate Data</title>
+    <script src="data/data-collection-cn.js" defer></script>
+    <script src="scripts/cn/functions.js" defer></script>
+    <script src="scripts/cn/aggregate.js" defer></script>
+    <title>新冠动态图解 - 历史数据</title>
 </head>
 
 <body>
@@ -26,18 +26,18 @@
         <div class='nav-menu'>
             <nav>
                 <ul>
-                    <li class='menu-item'><a href="daily.html">Daily Data</a></li>
-                    <li class='menu-item'><a href="aggregate.html">Aggregate Data</a></li>
+                    <li class='menu-item'><a href="daily-cn.html">每日新增</a></li>
+                    <li class='menu-item'><a href="aggregate-cn.html">历史数据</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <section>
-        <h1>COVID-19: Interactive Data Visualization - Comparing Global Performance</h1>
+        <h1>COVID-19 新冠肺炎: 动态数据可视化 - 各国防疫现状对比</h1>
         <div class='text-center text-italics' id='footer-1'></div>
         <div class='text-center text-italics'>
-            Data source: <a href='https://data.humdata.org/'>Centre for Humanitarian Data of the United Nations</a>
+            数据来源: <a href='https://data.humdata.org/'>联合国人道主义数据中心</a>
         </div>
     </section>
 
@@ -55,22 +55,22 @@
                     <div class='graph-options' , id='all-cases-graph-options'>
                         <div>
                             <input type="checkbox" id="all-cases-log" name="all-cases-log">
-                            <label for="all-cases-log">Use Log Scale</label>
+                            <label for="all-cases-log">使用对数刻度</label>
                         </div>
 
                         <div id='all-cases-smoothing'>
-                            Smoothing:
+                            平滑曲线窗口:
                         </div>
 
                         <br>
-                        <div style='font-size:small'>Data Filter</div>
+                        <div style='font-size:small'>数据筛选</div>
                     </div>
 
                     <div class='table-area scroll-y height320'>
                         <table class='regions-table' id='all-cases-table'>
                         </table>
                     </div>
-                    <button class='selection-button' id='all-cases-clear'>Clear selection</button>
+                    <button class='selection-button' id='all-cases-clear'>清空选择</button>
                 </div>
             </div>
 
@@ -94,22 +94,22 @@
                     <div class='graph-options' , id='deaths-cases-graph-options'>
                         <div>
                             <input type="checkbox" id="deaths-cases-log" name="deaths-cases-log">
-                            <label for="deaths-cases-log">Use Log Scale</label>
+                            <label for="deaths-cases-log">使用对数刻度</label>
                         </div>
 
                         <div id='deaths-cases-smoothing'>
-                            Smoothing:
+                            平滑曲线:
                         </div>
 
                         <br>
-                        <div style='font-size:small'>Data Filter</div>
+                        <div style='font-size:small'>数据筛选</div>
                     </div>
 
                     <div class='table-area scroll-y height320'>
                         <table class='regions-table' id='deaths-cases-table'>
                         </table>
                     </div>
-                    <button class='selection-button' id='deaths-cases-clear'>Clear selection</button>
+                    <button class='selection-button' id='deaths-cases-clear'>清空选择</button>
                 </div>
             </div>
             
@@ -125,9 +125,9 @@
 
         <section class='flex-display center config-table-area'>
             <div class='graph-config', id='summary-table-config'>
-                <h4 style='text-align: center;'>Data Filters</h4>
+                <h4 style='text-align: center;'>数据筛选</h4>
                 <div>
-                    <button class='selection-button' id='add-table-filter'>Add Filter</button>
+                    <button class='selection-button' id='add-table-filter'>增加条件</button>
                 </div>
                 
             </div>
