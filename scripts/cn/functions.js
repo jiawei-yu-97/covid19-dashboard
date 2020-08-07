@@ -1,49 +1,52 @@
-function drawLineGraph(data, dataName, tableID, graphOptionsID, lineGraphID, lineSmootingID, lineLogID, clearButtonID){
+function drawLineGraph(data, dataName, lineGraphID, graphOptionsID){
     let tabularData = new TypedTabularData(objToArray(data['latest']), ['国家或地区', dataName]);
-    let table = new TypedTable(tableID, false, tabularData);
     
-    let headerControl = new SortableTableHeader(table);
-    headerControl.setHeaderEventListeners();
-    headerControl.display();
-    
-    let tableFilter = new TableFilter(table, graphOptionsID,'table-control');
-    tableFilter.makeControlArea(false);
-    
-    let lineGraph = new LineGraph(lineGraphID, null);
-    lineGraph.setLayout({title: '每日' + dataName});
-    let timeSeriesSelection = new TimeSeriesSelection(lineGraph, null, table);
-    let timeSeriesSmoothing = new TimeSeriesSmoothing(lineGraph, null, lineSmootingID)
-    
+    let lineGraph = new LineGraph(lineGraphID, null, 'lines+markers');
+    lineGraph.setLayout({title: '每日'+dataName});
     let timeSeriesData = TimeSeriesData.fromProcessedDict(data);
-    let controlsChain = new ControlsChain([timeSeriesSelection, timeSeriesSmoothing], timeSeriesData);
-    
-    timeSeriesSelection.setTableRowFunc();
-    timeSeriesSelection.countriesClicked['全球'] = true;
-    timeSeriesSelection.refillTable();
-    timeSeriesSelection.updateAndDisplay();
-    timeSeriesSmoothing.addRadios();
-    
-    let timeSeriesLogScale = new TimeSeriesLogScale(lineGraph, lineLogID);
-    timeSeriesLogScale.setEventListener();
-    
-    let clearButton = document.getElementById(clearButtonID);
-    clearButton.onclick = function() {
-        timeSeriesSelection.ClearSelection();
-    }
 
-    lineGraph.display();
+    let graphOptionsNode = getNode(graphOptionsID)
+    let combinedControl = new TimeSeriesCombinedControl(lineGraph, timeSeriesData, tabularData, graphOptionsNode,dataName);
+    combinedControl.makeLogControl('使用对数刻度');
+    combinedControl.makeSmoothingControl('平滑曲线窗口');
+
+    graphOptionsNode.appendChild(document.createElement('br'));
+    graphOptionsNode.appendChild(document.createTextNode('数据过滤（点击国家，加入对比图）'));
+
+    combinedControl.makeTable('scroll-y height240', '清空选择', false);
+    combinedControl.updateAndDisplay();
+}
+
+
+function drawMultipleAxesLineGraph(dataArray, dataNames, axes, lineGraphID, graphOptionsID, controlName){
+    let tabularData = new TypedTabularData(objToArray(dataArray[0]['latest']), ['国家或地区', dataNames[0]]);
+
+    let lineGraph = new MultipleAxesLineGrpah(lineGraphID, null, axes, 'lines+markers');
+    lineGraph.setLayout({title: '每日累积数据'});
+    let multiTimeSeriesData = MultiTimeSeriesData.fromProcessedDict(dataArray, dataNames);
+
+    let graphOptionsNode = getNode(graphOptionsID)
+    let combinedControl = new TimeSeriesCombinedControl(lineGraph, multiTimeSeriesData, tabularData, graphOptionsNode, controlName);
+    combinedControl.makeLogControl('使用对数刻度');
+    combinedControl.makeSmoothingControl('平滑曲线窗口');
+
+    graphOptionsNode.appendChild(document.createElement('br'));
+    graphOptionsNode.appendChild(document.createTextNode('数据过滤'));
+
+    combinedControl.makeTable('scroll-y height240', '清空选择', true);
+    combinedControl.updateAndDisplay();
 }
 
 
 function drawBarPie(data, barID, barName, pieID, pieName) {
     data = data['latest'];
     data = objToArray(data);
-    let headerNames = ['国家或地区', '人数'];
+    let headerNames = ['country', 'cases'];
     tabularData = new TypedTabularData(data, headerNames);
 
     pieGraph = new PieGraph(pieID, tabularData, 0, 1);
     pieGraph.setLayout({'title': pieName});
-    pieControl = new PieControl(pieGraph, tabularData, 10);
+    pieControl = new PieControl(pieGraph, tabularData, 9);
     pieControl.updateAndDisplay();
 
     barGraph = new BarGraph(barID, tabularData, 0, 1);
@@ -53,7 +56,7 @@ function drawBarPie(data, barID, barName, pieID, pieName) {
 }
 
 
-function drawSummaryTable(dataCollection, tableID) {
+function drawSummaryTable(dataCollection, tableID, graphConfigID, addFilterID) {
     let deaths = dataCollection['deaths']['latest'];
     let cases = dataCollection['confirmed']['latest'];
     let recovs = dataCollection['recovered']['latest'];
@@ -69,15 +72,14 @@ function drawSummaryTable(dataCollection, tableID) {
         let resolved = floatToPerct((death + recov) / confirmed);
         dataArray.push([country, confirmed, death, deathRate, recov, recovRate, resolved]);
     }
-    let headerNames = ['国家或地区', '确诊总数', '病亡总数', '死亡率', '痊愈总数', '痊愈率', '死亡+痊愈比例'];
+    let headerNames = ['国家或地区', '确诊总数', '死亡总数', '死亡率', '痊愈总数', '痊愈率', '死亡率+痊愈率'];
 
     let tabularData = new TypedTabularData(dataArray, headerNames);
     let tableView = new TypedTable(tableID, true, tabularData);
 
     let headerControl = new SortableTableHeader(tableView);
-    let addFilterButton = document.getElementById('add-table-filter');
-    let graphConfigID = 'summary-table-config';
-    let tableFilter = new TableFilter(tableView, graphConfigID, 'table-control');
+    let addFilterButton = getNode(addFilterID);
+    let tableFilter = new TableFilter(tableView, getNode(graphConfigID), 'table-control');
     let controlsChain = new ControlsChain([headerControl, tableFilter]);
     controlsChain.setData(tabularData);
 
