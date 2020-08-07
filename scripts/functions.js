@@ -1,37 +1,40 @@
-function drawLineGraph(data, dataName, tableID, graphOptionsID, lineGraphID, lineSmootingID, lineLogID, clearButtonID){
+function drawLineGraph(data, dataName, lineGraphID, graphOptionsID){
     let tabularData = new TypedTabularData(objToArray(data['latest']), ['country', dataName]);
-    let table = new TypedTable(tableID, false, tabularData);
     
-    let headerControl = new SortableTableHeader(table);
-    headerControl.setHeaderEventListeners();
-    headerControl.display();
-    
-    let tableFilter = new TableFilter(table, graphOptionsID,'table-control');
-    tableFilter.makeControlArea(false);
-    
-    let lineGraph = new LineGraph(lineGraphID, null);
+    let lineGraph = new LineGraph(lineGraphID, null, 'lines+markers');
     lineGraph.setLayout({title: dataName + ' per day'});
-    let timeSeriesSelection = new TimeSeriesSelection(lineGraph, null, table);
-    let timeSeriesSmoothing = new TimeSeriesSmoothing(lineGraph, null, lineSmootingID)
-    
     let timeSeriesData = TimeSeriesData.fromProcessedDict(data);
-    let controlsChain = new ControlsChain([timeSeriesSelection, timeSeriesSmoothing], timeSeriesData);
-    
-    timeSeriesSelection.setTableRowFunc();
-    timeSeriesSelection.countriesClicked['World'] = true;
-    timeSeriesSelection.refillTable();
-    timeSeriesSelection.updateAndDisplay();
-    timeSeriesSmoothing.addRadios();
-    
-    let timeSeriesLogScale = new TimeSeriesLogScale(lineGraph, lineLogID);
-    timeSeriesLogScale.setEventListener();
-    
-    let clearButton = document.getElementById(clearButtonID);
-    clearButton.onclick = function() {
-        timeSeriesSelection.ClearSelection();
-    }
 
-    lineGraph.display();
+    let graphOptionsNode = getNode(graphOptionsID)
+    let combinedControl = new TimeSeriesCombinedControl(lineGraph, timeSeriesData, tabularData, graphOptionsNode,dataName);
+    combinedControl.makeLogControl('Use Log Scale');
+    combinedControl.makeSmoothingControl('Smoothing: ');
+
+    graphOptionsNode.appendChild(document.createElement('br'));
+    graphOptionsNode.appendChild(document.createTextNode('Data filter'));
+
+    combinedControl.makeTable('scroll-y height240', 'Clear Selection');
+    combinedControl.updateAndDisplay();
+}
+
+
+function drawMultipleAxesLineGraph(dataArray, dataNames, axes, lineGraphID, graphOptionsID, controlName){
+    let tabularData = new TypedTabularData(objToArray(dataArray[0]['latest']), ['country', dataNames[0]]);
+
+    let lineGraph = new MultipleAxesLineGrpah(lineGraphID, null, axes, 'lines+markers');
+    lineGraph.setLayout({title: 'Cases per day'});
+    let multiTimeSeriesData = MultiTimeSeriesData.fromProcessedDict(dataArray, dataNames);
+
+    let graphOptionsNode = getNode(graphOptionsID)
+    let combinedControl = new TimeSeriesCombinedControl(lineGraph, multiTimeSeriesData, tabularData, graphOptionsNode, controlName);
+    combinedControl.makeLogControl('Use Log Scale');
+    combinedControl.makeSmoothingControl('Smoothing: ');
+
+    graphOptionsNode.appendChild(document.createElement('br'));
+    graphOptionsNode.appendChild(document.createTextNode('Data filter'));
+
+    combinedControl.makeTable('scroll-y height240', 'Clear Selection', true);
+    combinedControl.updateAndDisplay();
 }
 
 
@@ -43,7 +46,7 @@ function drawBarPie(data, barID, barName, pieID, pieName) {
 
     pieGraph = new PieGraph(pieID, tabularData, 0, 1);
     pieGraph.setLayout({'title': pieName});
-    pieControl = new PieControl(pieGraph, tabularData, 10);
+    pieControl = new PieControl(pieGraph, tabularData, 9);
     pieControl.updateAndDisplay();
 
     barGraph = new BarGraph(barID, tabularData, 0, 1);
@@ -53,7 +56,7 @@ function drawBarPie(data, barID, barName, pieID, pieName) {
 }
 
 
-function drawSummaryTable(dataCollection, tableID) {
+function drawSummaryTable(dataCollection, tableID, graphConfigID, addFilterID) {
     let deaths = dataCollection['deaths']['latest'];
     let cases = dataCollection['confirmed']['latest'];
     let recovs = dataCollection['recovered']['latest'];
@@ -75,9 +78,8 @@ function drawSummaryTable(dataCollection, tableID) {
     let tableView = new TypedTable(tableID, true, tabularData);
 
     let headerControl = new SortableTableHeader(tableView);
-    let addFilterButton = document.getElementById('add-table-filter');
-    let graphConfigID = 'summary-table-config';
-    let tableFilter = new TableFilter(tableView, graphConfigID, 'table-control');
+    let addFilterButton = getNode(addFilterID);
+    let tableFilter = new TableFilter(tableView, getNode(graphConfigID), 'table-control');
     let controlsChain = new ControlsChain([headerControl, tableFilter]);
     controlsChain.setData(tabularData);
 

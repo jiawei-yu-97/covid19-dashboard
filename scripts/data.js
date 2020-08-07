@@ -279,12 +279,14 @@ class TimeSeriesData extends Data {
             this.validate(data);
         }
         this.series = {};
+        this.countries = [];
         this.dates = data['date'];
         for (let key of Object.keys(data)){
             if (key === 'date' || key === 'latest'){
                 continue;
             }
             let country = key;
+            this.countries.push(country);
             this.series[country] = data[country];
         }
     }
@@ -296,5 +298,73 @@ class TimeSeriesData extends Data {
             newData[country] = this.series[country];
         }
         return new TimeSeriesData(newData, false);
+    }
+
+    smoothSeries(smoothing){
+        let newData = {};
+        newData['date'] = this.dates;
+        for (let country of Object.keys(this.series)){
+            newData[country] = smoothSeries(this.series[country], smoothing);
+        }
+        return new TimeSeriesData(newData, false);
+    }
+}
+
+
+class MultiTimeSeriesData extends TimeSeriesData {
+    constructor(data, validate=true) {
+        super(data, validate);
+        if (data !== null){
+            this.setData(data);
+        }
+    }
+
+    static fromProcessedDict(dataArray, dataNames, validate=true){
+        let data = {};
+        for (let i=0; i<dataNames.length; i++){
+            data[dataNames[i]] = TimeSeriesData.fromProcessedDict(dataArray[i]);
+        }
+        return new MultiTimeSeriesData(data);
+    }
+
+    validate(data){
+        for (let key of Object.keys(data)){
+            if (!data[key] instanceof TimeSeriesData) {
+                throw Error('MultiTimeSeriesData.validate: data must be a dictionary of TimeSeriesData');
+            }
+        }
+    }
+
+    copy() {
+        let newData = {};
+        for (let key of Object.keys(this.data)){
+            newData[key] = this.data[key].copy();
+        }
+        return new MultiTimeSeriesData(newData, true);
+    }
+
+    setData(data, validate=true){
+        if (validate){
+            this.validate(data);
+        }
+        this.data = data;
+        this.dates = data[Object.keys(data)[0]].dates;
+        this.countries = data[Object.keys(data)[0]].countries;
+    }
+
+    filterBySeries(series){
+        let newData = {};
+        for (let key of Object.keys(this.data)){
+            newData[key] = this.data[key].filterBySeries(series);
+        }
+        return new MultiTimeSeriesData(newData, false);
+    }
+
+    smoothSeries(smoothing){
+        let newData = {};
+        for (let key of Object.keys(this.data)){
+            newData[key] = this.data[key].smoothSeries(smoothing);
+        }
+        return new MultiTimeSeriesData(newData, false);
     }
 }

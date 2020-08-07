@@ -1,7 +1,7 @@
 class View {
-    constructor(viewID, data = null){
+    constructor(viewID, data = null) {
         this.viewID = viewID;
-        this.viewNode = document.getElementById(viewID);
+        this.viewNode = getNode(viewID);
     }
 }
 
@@ -9,12 +9,15 @@ class View {
 /*
 TABLE
 */
-class Table extends View{
-    constructor(tableID, addIndex=false, data=null){
+class Table extends View {
+    constructor(tableID, addIndex = false, data = null, tableNode = null) {
         super(tableID, data);
         this.setData(data);
         this.tableNode = this.viewNode;
-        
+        if (this.tableNode === null) {
+            this.tableNode = tableNode;
+        }
+
         // initialize variables for keeping track of row index
         this.addIndex = addIndex;
         this.rowIndex = 1;
@@ -24,16 +27,16 @@ class Table extends View{
     }
 
     get ncol() {
-        if (this.data){
+        if (this.data) {
             return this.data.ncol;
         }
         return 0;
     }
 
     get headerRow() {
-        for (let child of this.tableNode.childNodes){
-            if (child.nodeName === 'TR'){
-                if (child.childNodes[0].nodeName === 'TH'){
+        for (let child of this.tableNode.childNodes) {
+            if (child.nodeName === 'TR') {
+                if (child.childNodes[0].nodeName === 'TH') {
                     return child;
                 }
             }
@@ -43,9 +46,9 @@ class Table extends View{
 
     get entryRows() {
         let rows = [];
-        for (let child of this.tableNode.childNodes){
-            if (child.nodeName === 'TR'){
-                if (child.childNodes[0].nodeName === 'TD'){
+        for (let child of this.tableNode.childNodes) {
+            if (child.nodeName === 'TR') {
+                if (child.childNodes[0].nodeName === 'TD') {
                     rows.push(child);
                 }
             }
@@ -53,28 +56,28 @@ class Table extends View{
         return rows;
     }
 
-    setData(data){
+    setData(data) {
         this.validate(data);
         this.data = data;
     }
 
-    validate(data){
-        if (data!==null && !data instanceof TabularData){
+    validate(data) {
+        if (data !== null && !data instanceof TabularData) {
             throw Error('Table.validate: data is not a TabularData object');
         }
         return true;
     }
 
-    setRowFunc(func){
+    setRowFunc(func) {
         this.rowFunc = func;
     }
 
-    setCellFunc(func){
+    setCellFunc(func) {
         this.cellFunc = func;
     }
 
-    addHeaders(){
-        if (this.addIndex){
+    addHeaders() {
+        if (this.addIndex) {
             this.addRow(['#'].concat(this.data.headerNames), 'th', false);
         } else {
             this.addRow(this.data.headerNames, 'th', false);
@@ -85,14 +88,14 @@ class Table extends View{
         this.headerRow.remove();
     }
 
-    addRow(array, cellType = 'td', addIndex = this.addIndex){
+    addRow(array, cellType = 'td', addIndex = this.addIndex) {
         let rowNode = document.createElement('tr');
         let arrayCopy = [...array];
-        if (addIndex){
+        if (addIndex) {
             arrayCopy.unshift(this.rowIndex);
             this.rowIndex += 1;
         }
-        for (let a of arrayCopy){
+        for (let a of arrayCopy) {
             let cellNode = document.createElement(cellType);
             cellNode.appendChild(document.createTextNode(a));
             this.cellFunc(cellNode, a);
@@ -102,9 +105,9 @@ class Table extends View{
         this.tableNode.appendChild(rowNode);
     }
 
-    removeEntryRows(){
+    removeEntryRows() {
         let rows = this.entryRows;
-        for (let row of rows){
+        for (let row of rows) {
             row.remove();
         }
         this.rowIndex = 1;
@@ -122,9 +125,9 @@ class Table extends View{
         this.removeEntryRows();
     }
 
-    refillTable(data=null, addIndex = this.addIndex) {
+    refillTable(data = null, addIndex = this.addIndex) {
         this.addIndex = addIndex;
-        if (data !== null){
+        if (data !== null) {
             this.setData(data);
         }
         this.clearTable();
@@ -135,12 +138,12 @@ class Table extends View{
 
 
 class TypedTable extends Table {
-    constructor(tableID, addIndex, data){
-        super(tableID, addIndex, data);
+    constructor(tableID, addIndex, data, tableNode) {
+        super(tableID, addIndex, data, tableNode);
     }
 
     get dataTypes() {
-        if (this.data){
+        if (this.data) {
             return this.data.dataTypes;
         }
         return [];
@@ -151,8 +154,8 @@ class TypedTable extends Table {
 /*
 GRAPH
 */
-class Graph extends View{
-    constructor(graphID, data=null){
+class Graph extends View {
+    constructor(graphID, data = null) {
         super(graphID, data);
         this.graphID = graphID;
         this.graphNode = this.viewNode;
@@ -161,81 +164,76 @@ class Graph extends View{
 
 
 class PlotlyGraph extends Graph {
-    constructor(graphID, data=null){
+    constructor(graphID, data = null) {
         super(graphID, data);
         this.layout = this.defaultLayout();
     }
 
-    setLayout(layout){
-        for (let key of Object.keys(layout)){
+    setLayout(layout) {
+        for (let key of Object.keys(layout)) {
             this.layout[key] = layout[key];
         }
     }
 
     defaultLayout() {
-        return {};
+        return {
+            font: { color: color1 }
+        }
     }
 }
 
 
-class FlatGraph extends PlotlyGraph{
+class FlatGraph extends PlotlyGraph {
     // FlatGraph accepts TabularData with at least 2 columns
     // The data column (dataCol) needs to have type Number
-    constructor(graphID, data=null, labelCol = null, dataCol = null){
+    constructor(graphID, data = null, labelCol = null, dataCol = null) {
         super(graphID, data);
         this.setData(data, labelCol, dataCol);
         this.xname = null;
         this.yname = null;
     }
 
-    validate(data){
-        if (data === null){
+    validate(data) {
+        if (data === null) {
             return true;
         } else if (!data instanceof TabularData) {
             throw Error('BarGraph.validate: data needs to be an instance of TabularData')
-        } else if (data.ncol < 2){
+        } else if (data.ncol < 2) {
             throw Error('BraGraph.validate: data needs at least 2 columns');
         }
     }
 
-    setColumns(labelCol, dataCol){
-        if (this.data === null){
-            if (labelCol !== null || dataCol !== null){
+    setColumns(labelCol, dataCol) {
+        if (this.data === null) {
+            if (labelCol !== null || dataCol !== null) {
                 throw Error('BarGraph.setColumns: cannot to set columns on null data');
             }
         } else if (labelCol >= this.data.ncol) {
-                throw Error('BarGraph.setColumns: labelCol > number of columns of data');
+            throw Error('BarGraph.setColumns: labelCol > number of columns of data');
         } else if (dataCol >= this.data.ncol) {
             throw Error('BarGraph.setColumns: dataCol > number of columns of data');
         } else if (this.data.dataTypes[dataCol] !== 'number') {
             throw Error('BarGraph.setColumn: data in dataCol needs to be type number');
         }
-        
+
         this.labelCol = labelCol;
         this.dataCol = dataCol;
         this.graphData = this.getGraphData();
     }
 
-    setData(data, labelCol, dataCol){
+    setData(data, labelCol, dataCol) {
         this.data = data;
         this.labelCol = labelCol;
         this.dataCol = dataCol;
         this.graphData = this.getGraphData();
     }
 
-    defaultLayout() {
-        let layout = {
-            font: {color: color1}
-        }
-        return layout;
-    }
-
-    getGraphData(data=this.data, labelCol=this.labelCol, dataCol=this.dataCol){
+    getGraphData(data = this.data, labelCol = this.labelCol, dataCol = this.dataCol) {
         let graphData = {};
-        if (data !== null){
+        if (data !== null) {
             graphData[this.xname] = data.getColumn(labelCol);
             graphData[this.yname] = data.getColumn(dataCol);
-        } 
+        }
         return graphData;
     }
 
@@ -246,7 +244,7 @@ class FlatGraph extends PlotlyGraph{
 
 
 class BarGraph extends FlatGraph {
-    constructor(graphID, data=null, labelCol = null, dataCol = null){
+    constructor(graphID, data = null, labelCol = null, dataCol = null) {
         super(graphID, data, labelCol, dataCol);
         this.xname = 'x';
         this.yname = 'y';
@@ -254,7 +252,7 @@ class BarGraph extends FlatGraph {
 
     defaultLayout() {
         let layout = super.defaultLayout();
-        layout['marker'] = {color: color3};
+        layout['marker'] = { color: color3 };
         return layout;
     }
 
@@ -266,8 +264,8 @@ class BarGraph extends FlatGraph {
 }
 
 
-class PieGraph extends FlatGraph{
-    constructor(graphID, data=null, labelCol = null, dataCol = null){
+class PieGraph extends FlatGraph {
+    constructor(graphID, data = null, labelCol = null, dataCol = null) {
         super(graphID, data, labelCol, dataCol);
         this.xname = 'labels';
         this.yname = 'values';
@@ -284,42 +282,70 @@ class PieGraph extends FlatGraph{
 
 
 class LineGraph extends PlotlyGraph {
-    constructor(graphID, data, mode='lines', colors={}){
+    constructor(graphID, data, mode = 'lines', colors = {}) {
         super(graphID, data);
         this.setData(data, mode, colors);
-        this.config = this.getDefaultConfig();
+        this.config = this.defaultConfig();
     }
-    
-    setData(data, mode=this.mode, colors=this.colors){
+
+    setData(data, mode = this.mode, colors = this.colors) {
         this.data = data;
         this.mode = mode;
         this.colors = colors;
     }
-    
-    getDefaultConfig() {
+
+    defaultConfig() {
         return {
             scrollZoom: true,
             responsive: true
         }
     }
 
-    getDeafultLayout() {
-        return {
-            hovermode: 'closest',
-            yaxis: 'linear'
+    defaultLayout() {
+        let layout = super.defaultLayout();
+        layout['hovermode'] = 'closest';
+        layout['yaxis'] = {
+            autorange: true,
+            type: 'linear'
         }
+        layout['xaxis'] = {
+            rangeselector: {
+                buttons: [
+                    {
+                        count: 1,
+                        label: '1 month',
+                        step: 'month',
+                        stepmode: 'backward'
+                    },
+                    {
+                        count: 3,
+                        label: '3 months',
+                        step: 'month',
+                        stepmode: 'backward'
+                    },
+                    {
+                        count: 6,
+                        label: '6 months',
+                        step: 'month',
+                        stepmode: 'backward'
+                    },
+                    { step: 'all' }
+                ]
+            }
+        }
+        return layout;
     }
 
     display() {
-        let traces= [];
-        for (let name of this.data.seriesNames){
-            traces.push(this.makeTrace(name)); 
+        let traces = [];
+        for (let name of this.data.seriesNames) {
+            traces.push(this.makeTrace(name));
         }
         Plotly.newPlot(this.graphID, traces, this.layout, this.config);
     }
 
-    getColor(name){
-        if (name in this.colors){
+    getColor(name) {
+        if (name in this.colors) {
             return this.colors[name];
         } else {
             let color = getRandColor();
@@ -328,7 +354,7 @@ class LineGraph extends PlotlyGraph {
         }
     }
 
-    makeTrace(name){
+    makeTrace(name) {
         return {
             x: this.data.dates,
             y: this.data.series[name],
@@ -339,5 +365,63 @@ class LineGraph extends PlotlyGraph {
             },
             name: name
         }
+    }
+}
+
+
+class MultipleAxesLineGrpah extends LineGraph {
+    constructor(graphID, data, axes, mode = 'lines', colors = {}) {
+        super(graphID, data, mode, colors);
+
+        this.axes = axes;
+        this.defaultColors = ['blue','red','green'];
+    }
+
+    getColor(dataName){
+        let i = 0;
+        for (let key of Object.keys(this.data.data)) {
+            if (key === dataName){
+                return this.defaultColors[i];
+            } else {
+                i += 1;
+            }
+        }
+        return super.getColor(dataName);
+    }
+
+    makeTrace(dataName, countryName) {
+        let trace = {
+            x: this.data.dates,
+            y: this.data.data[dataName].series[countryName],
+            mode: this.mode,
+            marker: {
+                color: this.getColor(dataName),
+                size: 5
+            },
+            name: dataName
+        }
+        if (dataName in this.axes){
+            trace['yaxis'] = this.axes[dataName];
+        }
+        return trace;
+    }
+
+    defaultLayout() {
+        let layout = super.defaultLayout();
+        layout['yaxis2'] = {
+            overlaying: 'y',
+            side: 'right'
+        };
+        return layout;
+    }
+
+    display() {
+        let traces = [];
+        for (let dataName of Object.keys(this.data.data)) {
+            for (let countryName of this.data.countries){
+                traces.push(this.makeTrace(dataName, countryName));
+            }
+        }
+        Plotly.newPlot(this.graphID, traces, this.layout, this.config);
     }
 }

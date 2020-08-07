@@ -69,6 +69,10 @@ class Control {
         this.setViewData(data);
         this.view.display();
     }
+
+    display() {
+        this.view.display();
+    }
 }
 
 
@@ -119,7 +123,7 @@ class ControlsChain {
         if (control in this.controls){
                 throw Error('ControlsChain.addToChain: control already exists in chain');
         }
-        this.controls.push(c);
+        this.controls.push(control);
         control.chain = this;
     }
 }
@@ -232,9 +236,9 @@ class SortableTableHeader extends TypedTableControl {
 
 
 class TableFilter extends TypedTableControl {
-    constructor(table, parentID, divClass=null, data=null,validate=true){
+    constructor(table, parentNode, divClass=null, data=null,validate=true){
         super(table, data, validate);
-        this.parentNode = document.getElementById(parentID);
+        this.parentNode = parentNode;
         this.divClass = divClass;
 
         this.filters = {};
@@ -410,7 +414,7 @@ class BarControl extends FlatGraphControl {
 
 
 class PieControl extends FlatGraphControl {
-    constructor(graph, data = null, piesToDisplay = 10, validate=true) {
+    constructor(graph, data = null, piesToDisplay = 10,  validate=true) {
         super(graph, data, validate);
         this.piesToDisplay = piesToDisplay;
     }
@@ -442,11 +446,12 @@ class PieControl extends FlatGraphControl {
 
 
 class TimeSeriesSelection extends Control {
-    constructor(view, data, table, validate=true){
+    constructor(view, data, table, clearOnClick=false, validate=true){
         super(view, data, validate);
         this.validate(view, data, table);
         this.graph = view;
         this.table = table;
+        this.clearOnClick = clearOnClick;
     }
 
     validate(view, data, table){
@@ -463,7 +468,7 @@ class TimeSeriesSelection extends Control {
         this.data = data;
         this.countriesClicked = {};
         if (data !== null){
-            for (let key in Object.keys(data.series)){
+            for (let key of data.countries){
                 this.countriesClicked[key] = false;
             }
         }
@@ -492,6 +497,15 @@ class TimeSeriesSelection extends Control {
         
             rowNode.onclick = function() {
                 let country = this.childNodes[0].innerHTML;
+                if (control.clearOnClick) {
+                    for (let key of Object.keys(control.countriesClicked)) {
+                        control.countriesClicked[key] = false;
+                        for (let row of control.table.entryRows){
+                            row.setAttribute('class', 'region-button');
+                        }
+                    }
+                }
+
                 if (control.countriesClicked[country]){
                     this.setAttribute('class', 'region-button');
                     control.countriesClicked[country] = false;
@@ -508,9 +522,8 @@ class TimeSeriesSelection extends Control {
     refillTable() {
         this.table.refillEntryRows();
     }
-
     
-    ClearSelection() {
+    clearSelection() {
         for (let key of Object.keys(this.countriesClicked)) {
             this.countriesClicked[key] = false;
         }
@@ -521,12 +534,14 @@ class TimeSeriesSelection extends Control {
 
 
 class TimeSeriesSmoothing extends Control {
-    constructor(view, data, divID, smoothingOptions = [3,7,15]){
+    constructor(view, data, divNode, id='', labelUnit = '-day', smoothingOptions = [3,7,15]){
         super(view, data);
         this.validate(view, data)
-        this.divNode = document.getElementById(divID);
+        this.divNode = divNode;
         this.smoothingOptions = smoothingOptions;
         this.smoothing = 1;
+        this.id = id;
+        this.labelUnit = labelUnit;
     }
 
     validate(view, data){
@@ -538,20 +553,18 @@ class TimeSeriesSmoothing extends Control {
     }
 
     updateData(data = this.getChainData(), validate=false){
-        for (let country of Object.keys(data.series)){
-            data.series[country] = smoothSeries(data.series[country], this.smoothing);
-        }
-        return data;
+        return data.smoothSeries(this.smoothing);
     }
 
     addRadios(){
         let control = this;
+        let inputName = this.id + 'time-series-smoothing';
+        let inputID = this.id + 'time-series-smoothing-no';
 
         let inputNode = document.createElement('input');
         inputNode.setAttribute('type', 'radio');
-        inputNode.setAttribute('name', 'time-series-smoothing');
-        let inputID = 'time-series-smoothing-no'
-        inputNode.setAttribute('id', inputID)
+        inputNode.setAttribute('name', inputName);
+        inputNode.setAttribute('id', inputID);
         inputNode.setAttribute('value', 1);
         inputNode.setAttribute('checked', true);
         let labelNode = document.createElement('label');
@@ -567,15 +580,16 @@ class TimeSeriesSmoothing extends Control {
         }
 
         for (let s of this.smoothingOptions){
+            let inputID = this.id + 'time-series-smoothing-' + s;
+
             let inputNode = document.createElement('input');
             inputNode.setAttribute('type', 'radio');
-            inputNode.setAttribute('name', 'time-series-smoothing');
-            let inputID = 'time-series-smoothing-' + s;
+            inputNode.setAttribute('name', inputName);
             inputNode.setAttribute('id', inputID)
             inputNode.setAttribute('value', s);
             let labelNode = document.createElement('label');
             labelNode.setAttribute('for', inputID);
-            labelNode.appendChild(document.createTextNode(s+'-day'));
+            labelNode.appendChild(document.createTextNode(s+this.labelUnit));
 
             this.divNode.appendChild(inputNode);
             this.divNode.appendChild(labelNode);
@@ -590,9 +604,9 @@ class TimeSeriesSmoothing extends Control {
 
 
 class TimeSeriesLogScale extends Control {
-    constructor(view, checkBoxID){
+    constructor(view, checkBoxNode){
         super(view, null);
-        this.checkBoxNode = document.getElementById(checkBoxID);
+        this.checkBoxNode = checkBoxNode;
         this.graph = view;
     }
 
@@ -606,5 +620,100 @@ class TimeSeriesLogScale extends Control {
             }
             control.graph.display();
         }
+    }
+}
+
+
+class TimeSeriesCombinedControl extends Control {
+    constructor(graph, graphData, tableData, parentNode, name, ){
+        super(graph, graphData);
+        this.graph = graph;
+        this.graphData = graphData;
+        this.tableData = tableData;
+        this.parentNode = parentNode;
+        this.name = name;
+        this.chain = new ControlsChain([], graphData);
+    }
+
+    makeLogControl(text) {
+        let checkboxID = this.name+'-log';
+        let checkboxNode = document.createElement('input');
+        checkboxNode.setAttribute('type', 'checkbox');
+        checkboxNode.setAttribute('id', checkboxID);
+        checkboxNode.setAttribute('name', checkboxID);
+        let labelNode = document.createElement('label');
+        labelNode.setAttribute('for', checkboxID);
+        labelNode.innerHTML = text;
+
+        this.parentNode.appendChild(checkboxNode);
+        this.parentNode.appendChild(labelNode);
+
+        let logControl = new TimeSeriesLogScale(this.view, checkboxNode);
+        this.logControl = logControl;
+        logControl.setEventListener();
+    }
+
+    makeSmoothingControl(smoothingText, labelUnit='-day') {
+        let divNode = document.createElement('div');
+        divNode.appendChild(document.createTextNode(smoothingText))
+        divNode.setAttribute('id', this.name + '-smoothing');
+        this.parentNode.appendChild(divNode);
+
+        let smoothingControl = new TimeSeriesSmoothing(this.graph, null, divNode, this.name, labelUnit);
+        this.smoothingControl = smoothingControl;
+        this.chain.addToChain(smoothingControl);
+        smoothingControl.addRadios();
+    }
+
+    makeTable(divClass, clearButtonText, clearOnClick=false, defaultSelected = ['World']) {
+        let divNode = document.createElement('div');
+        divNode.setAttribute('class', divClass);
+
+        let tableID = this.name+'-table';
+        let tableNode = document.createElement('table');
+        tableNode.setAttribute('id', tableID);
+        divNode.appendChild(tableNode);
+
+        let table = new TypedTable(tableID, false, this.tableData, tableNode);
+        this.table = table;
+        let headerControl = new SortableTableHeader(table);
+        headerControl.setHeaderEventListeners();
+
+        this.makeTableFilter(table);
+        this.parentNode.appendChild(divNode);
+
+        let graphSelection = this.makeGraphSelection(table, clearOnClick, defaultSelected);
+        this.makeClearButton(graphSelection, clearButtonText);
+    }
+
+    makeTableFilter(table){
+        let tableFilter = new TableFilter(table, this.parentNode, 'table-control');
+        tableFilter.makeControlArea(false);
+        this.tableFilter = tableFilter;
+    }
+
+    makeGraphSelection(table, clearOnClick, defaultSelected) {
+        let timeSeriesSelection = new TimeSeriesSelection(this.graph, null, table, clearOnClick);
+        this.chain.addToChain(timeSeriesSelection);
+        timeSeriesSelection.setTableRowFunc();
+        for (let country of defaultSelected){
+            timeSeriesSelection.countriesClicked[country] = true;
+        }
+        timeSeriesSelection.refillTable();
+        this.timeSeriesSelection = timeSeriesSelection;
+        return timeSeriesSelection
+    }
+
+    makeClearButton(graphSelection, clearButtonText) {
+        let clearButton = document.createElement('button');
+        clearButton.innerHTML = clearButtonText;
+        clearButton.onclick = function() {
+            graphSelection.clearSelection();
+        }
+        this.parentNode.appendChild(clearButton);
+    }
+
+    updateAndDisplay() {
+        this.timeSeriesSelection.updateAndDisplay();
     }
 }
