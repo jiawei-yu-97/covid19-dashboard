@@ -504,6 +504,7 @@ class TimeSeriesSelection extends Control {
                             row.setAttribute('class', 'region-button');
                         }
                     }
+                    control.graph.setLayout({title: country});
                 }
 
                 if (control.countriesClicked[country]){
