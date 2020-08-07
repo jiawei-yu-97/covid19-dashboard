@@ -27,7 +27,8 @@
             <nav>
                 <ul>
                     <li class='menu-item'><a href="daily.html">Daily Data</a></li>
-                    <li class='menu-item'><a href="aggregate.html">Aggregate Data</a></li>
+                    <li class='menu-item'><a href="aggregate.html">Cumulative Data</a></li>
+                    <li class='menu-item'><a href="daily.html">中文</a></li>
                 </ul>
             </nav>
         </div>
@@ -51,31 +52,8 @@
         </section>
 
         <section class="plotting flex-display">
-            <div id='new-cases-select'>
-                <div class='graph-config'>
-                    <div class='graph-options' , id='new-cases-graph-options'>
-                        <div>
-                            <input type="checkbox" id="new-cases-log" name="new-cases-log">
-                            <label for="new-cases-log">Use Logarithmic Scale</label>
-                        </div>
-
-                        <div id='new-cases-smoothing'>
-                            Smoothing:
-                        </div>
-
-                        <br>
-                        <div style='font-size:small'>Data Filter</div>
-                    </div>
-
-                    <div class='table-area scroll-y height320'>
-                        <table class='regions-table' id='new-cases-table'>
-                        </table>
-                    </div>
-                    <button class='selection-button' id='new-cases-clear'>Clear selection</button>
-                </div>
-            </div>
-
-            <div class='flex-grow' id='new-cases-lines'></div>
+            <div class='graph-config' id='new-cases-graph-options'></div>
+            <div class='flex-grow height480' id='new-cases-lines'></div>
         </section>
     </section>
 
@@ -83,39 +61,15 @@
 
     <section class='bottom-border'>
         <h1 class='text-center' id='header-2'></h1>
-        <div class='text-center text-italics' id='footer-2'></div>
 
         <section class='plotting flex-display'>
-            <div class='flex-grow' id='death-cases-bar'></div>
-            <div class='flex-grow' id='death-cases-pie'></div>
+            <div class='flex-grow' id='deaths-cases-bar'></div>
+            <div class='flex-grow' id='deaths-cases-pie'></div>
         </section>
 
         <section class="plotting flex-display">
-            <div id='death-cases-select'>
-                <div class='graph-config'>
-                    <div class='graph-options' , id='death-cases-graph-options'>
-                        <div>
-                            <input type="checkbox" id="death-cases-log" name="death-cases-log">
-                            <label for="death-cases-log">Use Logarithmic Scale</label>
-                        </div>
-
-                        <div id='death-cases-smoothing'>
-                            Smoothing:
-                        </div>
-
-                        <br>
-                        <div style='font-size:small'>Data Filter</div>
-                    </div>
-
-                    <div class='table-area scroll-y height320'>
-                        <table class='regions-table' id='death-cases-table'>
-                        </table>
-                    </div>
-                    <button class='selection-button' id='death-cases-clear'>Clear selection</button>
-                </div>
-            </div>
-
-            <div class='flex-grow' id='death-cases-lines'></div>
+            <div class='graph-config' id='deaths-cases-graph-options'></div>
+            <div class='flex-grow height480' id='deaths-cases-lines'></div>
         </section>
     </section>
 
@@ -123,41 +77,13 @@
 
     <section class='bottom-border'>
         <h1 class='text-center' id='header-3'></h1>
-        <div class='text-center text-italics' id='footer-3'></div>
-
-        <section class='plotting flex-display'>
-            <div class='flex-grow' id='active-cases-bar'></div>
-            <div class='flex-grow' id='active-cases-pie'></div>
-        </section>
 
         <section class="plotting flex-display">
-            <div id='active-cases-select'>
-                <div class='graph-config'>
-                    <div class='graph-options' , id='active-cases-graph-options'>
-                        <div>
-                            <input type="checkbox" id="active-cases-log" name="active-cases-log">
-                            <label for="active-cases-log">Use Logarithmic Scale</label>
-                        </div>
-
-                        <div id='active-cases-smoothing'>
-                            Smoothing:
-                        </div>
-
-                        <br>
-                        <div style='font-size:small'>Data Filter</div>
-                    </div>
-
-                    <div class='table-area scroll-y height320'>
-                        <table class='regions-table' id='active-cases-table'>
-                        </table>
-                    </div>
-                    <button class='selection-button' id='active-cases-clear'>Clear selection</button>
-                </div>
-            </div>
-
-            <div class='flex-grow' id='active-cases-lines'></div>
+            <div class='graph-config' id='multi-lines-graph-options'></div>
+            <div class='flex-grow height480' id='multi-lines'></div>
         </section>
     </section>
+
 
 </body>
 

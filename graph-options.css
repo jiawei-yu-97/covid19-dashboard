@@ -50,10 +50,6 @@ th:hover{
     background-color: var(--color-1);
 }
 
-.selection-button {
-    font-size: 15px;
-}
-
 .region-button:hover{
     background-color: var(--color-5);
 }

@@ -18,7 +18,7 @@
     <script src="data/data-collection.js" defer></script>
     <script src="scripts/functions.js" defer></script>
     <script src="scripts/aggregate.js" defer></script>
-    <title>COVID Dashboard - Aggregate Data</title>
+    <title>COVID Dashboard - Cumulative Data</title>
 </head>
 
 <body>
@@ -27,7 +27,8 @@
             <nav>
                 <ul>
                     <li class='menu-item'><a href="daily.html">Daily Data</a></li>
-                    <li class='menu-item'><a href="aggregate.html">Aggregate Data</a></li>
+                    <li class='menu-item'><a href="aggregate.html">Cumulative Data</a></li>
+                    <li class='menu-item'><a href="aggregate-cn.html">中文</a></li>
                 </ul>
             </nav>
         </div>
@@ -43,38 +44,19 @@
 
     <section class='bottom-border'>
         <h1 class='text-center' id='header-1'></h1>
+        <div class='text-center text-italics' id='footer-3'></div>
 
-        <section class='plotting flex-display'>
-            <div class='flex-grow' id='all-cases-bar'></div>
-            <div class='flex-grow' id='all-cases-pie'></div>
-        </section>
-
-        <section class="plotting flex-display">
-            <div id='all-cases-select'>
-                <div class='graph-config'>
-                    <div class='graph-options' , id='all-cases-graph-options'>
-                        <div>
-                            <input type="checkbox" id="all-cases-log" name="all-cases-log">
-                            <label for="all-cases-log">Use Log Scale</label>
-                        </div>
-
-                        <div id='all-cases-smoothing'>
-                            Smoothing:
-                        </div>
-
-                        <br>
-                        <div style='font-size:small'>Data Filter</div>
-                    </div>
-
-                    <div class='table-area scroll-y height320'>
-                        <table class='regions-table' id='all-cases-table'>
-                        </table>
-                    </div>
-                    <button class='selection-button' id='all-cases-clear'>Clear selection</button>
+        <section class='flex-display center config-table-area'>
+            <div class='graph-config', id='summary-table-config'>
+                <h4 style='text-align: center;'>Data Filters</h4>
+                <div>
+                    <button id='add-table-filter'>Add Filter</button>
                 </div>
             </div>
 
-            <div class='flex-grow' id='all-cases-lines'></div>
+            <div class='table-area scroll-y height480'>
+                <table class='regions-table' id='summary-table'></table>
+            </div>
         </section>
     </section>
 
@@ -84,58 +66,40 @@
         <h1 class='text-center' id='header-2'></h1>
 
         <section class='plotting flex-display'>
-            <div class='flex-grow' id='deaths-cases-bar'></div>
-            <div class='flex-grow' id='deaths-cases-pie'></div>
+            <div class='flex-grow' id='all-cases-bar'></div>
+            <div class='flex-grow' id='all-cases-pie'></div>
         </section>
 
         <section class="plotting flex-display">
-            <div class='select-area' id='deaths-cases-select'>
-                <div class='graph-config'>
-                    <div class='graph-options' , id='deaths-cases-graph-options'>
-                        <div>
-                            <input type="checkbox" id="deaths-cases-log" name="deaths-cases-log">
-                            <label for="deaths-cases-log">Use Log Scale</label>
-                        </div>
-
-                        <div id='deaths-cases-smoothing'>
-                            Smoothing:
-                        </div>
-
-                        <br>
-                        <div style='font-size:small'>Data Filter</div>
-                    </div>
-
-                    <div class='table-area scroll-y height320'>
-                        <table class='regions-table' id='deaths-cases-table'>
-                        </table>
-                    </div>
-                    <button class='selection-button' id='deaths-cases-clear'>Clear selection</button>
-                </div>
-            </div>
-            
-            <div class='flex-grow' id='deaths-cases-lines'></div>
+            <div class='graph-config' id='all-cases-graph-options'></div>
+            <div class='flex-grow height480' id='all-cases-lines'></div>
         </section>
     </section>
 
     <br>
 
-    <section>
+    <section class='bottom-border'>
         <h1 class='text-center' id='header-3'></h1>
-        <div class='text-center text-italics' id='footer-3'></div>
 
-        <section class='flex-display center config-table-area'>
-            <div class='graph-config', id='summary-table-config'>
-                <h4 style='text-align: center;'>Data Filters</h4>
-                <div>
-                    <button class='selection-button' id='add-table-filter'>Add Filter</button>
-                </div>
-                
-            </div>
+        <section class='plotting flex-display'>
+            <div class='flex-grow' id='deaths-cases-bar'></div>
+            <div class='flex-grow' id='deaths-cases-pie'></div>
+        </section>
 
-            <div class='table-area scroll-y height480'>
-                <table class='regions-table' id='summary-table'></table>
-            </div>
-            
+        <section class="plotting flex-display">
+            <div class='graph-config' id='deaths-cases-graph-options'></div>
+            <div class='flex-grow height480' id='deaths-cases-lines'></div>
+        </section>
+    </section>
+
+    <br>
+
+    <section class='bottom-border'>
+        <h1 class='text-center' id='header-4'></h1>
+
+        <section class="plotting flex-display">
+            <div class='graph-config' id='multi-lines-graph-options'></div>
+            <div class='flex-grow height480' id='multi-lines'></div>
         </section>
     </section>
 

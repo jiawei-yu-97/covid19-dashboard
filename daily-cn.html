@@ -8,14 +8,13 @@
     <meta name="author" content="余嘉葳">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-    <script src="scripts/cn/plotly-latest.min.js"></script>
-    <script src="scripts/cn/helper-functions.js" defer></script>
+    <script src="scripts/plotly-latest.min.js"></script>
+    <script src="scripts/helper-functions.js" defer></script>
+    <script src="scripts/data.js" defer></script>
+    <script src="data/data-collection-cn.js" defer></script>
 
-    <script src="scripts/cn/data.js" defer></script>
     <script src="scripts/cn/view.js" defer></script>
     <script src="scripts/cn/control.js" defer></script>
-
-    <script src="data/data-collection-cn.js" defer></script>
     <script src="scripts/cn/functions.js" defer></script>
     <script src="scripts/cn/daily.js" defer></script>
     <title>新冠动态图解 - 每日新增</title>
@@ -28,6 +27,7 @@
                 <ul>
                     <li class='menu-item'><a href="daily-cn.html">每日新增</a></li>
                     <li class='menu-item'><a href="aggregate-cn.html">历史数据</a></li>
+                    <li class='menu-item'><a href="daily.html">English</a></li>
                 </ul>
             </nav>
         </div>
@@ -52,31 +52,8 @@
         </section>
 
         <section class="plotting flex-display">
-            <div id='new-cases-select'>
-                <div class='graph-config'>
-                    <div class='graph-options' , id='new-cases-graph-options'>
-                        <div>
-                            <input type="checkbox" id="new-cases-log" name="new-cases-log">
-                            <label for="new-cases-log">使用对数刻度</label>
-                        </div>
-
-                        <div id='new-cases-smoothing'>
-                            平滑曲线窗口:
-                        </div>
-
-                        <br>
-                        <div style='font-size:small'>数据筛选(点击国家以加入对比图)</div>
-                    </div>
-
-                    <div class='table-area scroll-y height320'>
-                        <table class='regions-table' id='new-cases-table'>
-                        </table>
-                    </div>
-                    <button class='selection-button' id='new-cases-clear'>清空选择</button>
-                </div>
-            </div>
-
-            <div class='flex-grow' id='new-cases-lines'></div>
+            <div class='graph-config' id='new-cases-graph-options'></div>
+            <div class='flex-grow height480' id='new-cases-lines'></div>
         </section>
     </section>
 
@@ -84,39 +61,15 @@
 
     <section class='bottom-border'>
         <h1 class='text-center' id='header-2'></h1>
-        <div class='text-center text-italics' id='footer-2'></div>
 
         <section class='plotting flex-display'>
-            <div class='flex-grow' id='death-cases-bar'></div>
-            <div class='flex-grow' id='death-cases-pie'></div>
+            <div class='flex-grow' id='deaths-cases-bar'></div>
+            <div class='flex-grow' id='deaths-cases-pie'></div>
         </section>
 
         <section class="plotting flex-display">
-            <div id='death-cases-select'>
-                <div class='graph-config'>
-                    <div class='graph-options' , id='death-cases-graph-options'>
-                        <div>
-                            <input type="checkbox" id="death-cases-log" name="death-cases-log">
-                            <label for="death-cases-log">使用对数刻度</label>
-                        </div>
-
-                        <div id='death-cases-smoothing'>
-                            平滑曲线窗口:
-                        </div>
-
-                        <br>
-                        <div style='font-size:small'>数据筛选(点击国家以加入对比图)</div>
-                    </div>
-
-                    <div class='table-area scroll-y height320'>
-                        <table class='regions-table' id='death-cases-table'>
-                        </table>
-                    </div>
-                    <button class='selection-button' id='death-cases-clear'>清空选择</button>
-                </div>
-            </div>
-
-            <div class='flex-grow' id='death-cases-lines'></div>
+            <div class='graph-config' id='deaths-cases-graph-options'></div>
+            <div class='flex-grow height480' id='deaths-cases-lines'></div>
         </section>
     </section>
 
@@ -124,41 +77,13 @@
 
     <section class='bottom-border'>
         <h1 class='text-center' id='header-3'></h1>
-        <div class='text-center text-italics' id='footer-3'></div>
-
-        <section class='plotting flex-display'>
-            <div class='flex-grow' id='active-cases-bar'></div>
-            <div class='flex-grow' id='active-cases-pie'></div>
-        </section>
 
         <section class="plotting flex-display">
-            <div id='active-cases-select'>
-                <div class='graph-config'>
-                    <div class='graph-options' , id='active-cases-graph-options'>
-                        <div>
-                            <input type="checkbox" id="active-cases-log" name="active-cases-log">
-                            <label for="active-cases-log">使用对数刻度</label>
-                        </div>
-
-                        <div id='active-cases-smoothing'>
-                            平滑曲线窗口:
-                        </div>
-
-                        <br>
-                        <div style='font-size:small'>数据筛选(点击国家以加入对比图)</div>
-                    </div>
-
-                    <div class='table-area scroll-y height320'>
-                        <table class='regions-table' id='active-cases-table'>
-                        </table>
-                    </div>
-                    <button class='selection-button' id='active-cases-clear'>清空选择</button>
-                </div>
-            </div>
-
-            <div class='flex-grow' id='active-cases-lines'></div>
+            <div class='graph-config' id='multi-lines-graph-options'></div>
+            <div class='flex-grow height480' id='multi-lines'></div>
         </section>
     </section>
+
 
 </body>
 

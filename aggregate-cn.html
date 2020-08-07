@@ -8,14 +8,13 @@
     <meta name="author" content="余嘉葳">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-    <script src="scripts/cn/plotly-latest.min.js"></script>
-    <script src="scripts/cn/helper-functions.js" defer></script>
+    <script src="scripts/plotly-latest.min.js"></script>
+    <script src="scripts/helper-functions.js" defer></script>
+    <script src="scripts/data.js" defer></script>
+    <script src="data/data-collection-cn.js" defer></script>
 
-    <script src="scripts/cn/data.js" defer></script>
     <script src="scripts/cn/view.js" defer></script>
     <script src="scripts/cn/control.js" defer></script>
-
-    <script src="data/data-collection-cn.js" defer></script>
     <script src="scripts/cn/functions.js" defer></script>
     <script src="scripts/cn/aggregate.js" defer></script>
     <title>新冠动态图解 - 历史数据</title>
@@ -28,6 +27,7 @@
                 <ul>
                     <li class='menu-item'><a href="daily-cn.html">每日新增</a></li>
                     <li class='menu-item'><a href="aggregate-cn.html">历史数据</a></li>
+                    <li class='menu-item'><a href="aggregate.html">English</a></li>
                 </ul>
             </nav>
         </div>
@@ -43,7 +43,7 @@
     </section>
 
     <section class='bottom-border'>
-        <h1 class='text-center' id='header-3'></h1>
+        <h1 class='text-center' id='header-1'></h1>
         <div class='text-center text-italics' id='footer-3'></div>
 
         <section class='flex-display center config-table-area'>
@@ -65,7 +65,7 @@
     <br>
 
     <section class='bottom-border'>
-        <h1 class='text-center' id='header-1'></h1>
+        <h1 class='text-center' id='header-2'></h1>
 
         <section class='plotting flex-display'>
             <div class='flex-grow' id='all-cases-bar'></div>
@@ -73,38 +73,15 @@
         </section>
 
         <section class="plotting flex-display">
-            <div id='all-cases-select'>
-                <div class='graph-config'>
-                    <div class='graph-options' , id='all-cases-graph-options'>
-                        <div>
-                            <input type="checkbox" id="all-cases-log" name="all-cases-log">
-                            <label for="all-cases-log">使用对数刻度</label>
-                        </div>
-
-                        <div id='all-cases-smoothing'>
-                            平滑曲线窗口:
-                        </div>
-
-                        <br>
-                        <div style='font-size:small'>数据筛选(点击国家以加入对比图)</div>
-                    </div>
-
-                    <div class='table-area scroll-y height320'>
-                        <table class='regions-table' id='all-cases-table'>
-                        </table>
-                    </div>
-                    <button class='selection-button' id='all-cases-clear'>清空选择</button>
-                </div>
-            </div>
-
-            <div class='flex-grow' id='all-cases-lines'></div>
+            <div class='graph-config' id='all-cases-graph-options'></div>
+            <div class='flex-grow height480' id='all-cases-lines'></div>
         </section>
     </section>
 
     <br>
 
-    <section>
-        <h1 class='text-center' id='header-2'></h1>
+    <section class='bottom-border'>
+        <h1 class='text-center' id='header-3'></h1>
 
         <section class='plotting flex-display'>
             <div class='flex-grow' id='deaths-cases-bar'></div>
@@ -112,31 +89,19 @@
         </section>
 
         <section class="plotting flex-display">
-            <div class='select-area' id='deaths-cases-select'>
-                <div class='graph-config'>
-                    <div class='graph-options' , id='deaths-cases-graph-options'>
-                        <div>
-                            <input type="checkbox" id="deaths-cases-log" name="deaths-cases-log">
-                            <label for="deaths-cases-log">使用对数刻度</label>
-                        </div>
+            <div class='graph-config' id='deaths-cases-graph-options'></div>
+            <div class='flex-grow height480' id='deaths-cases-lines'></div>
+        </section>
+    </section>
 
-                        <div id='deaths-cases-smoothing'>
-                            平滑曲线:
-                        </div>
+    <br>
 
-                        <br>
-                        <div style='font-size:small'>数据筛选(点击国家以加入对比图)</div>
-                    </div>
+    <section class='bottom-border'>
+        <h1 class='text-center' id='header-4'></h1>
 
-                    <div class='table-area scroll-y height320'>
-                        <table class='regions-table' id='deaths-cases-table'>
-                        </table>
-                    </div>
-                    <button class='selection-button' id='deaths-cases-clear'>清空选择</button>
-                </div>
-            </div>
-            
-            <div class='flex-grow' id='deaths-cases-lines'></div>
+        <section class="plotting flex-display">
+            <div class='graph-config' id='multi-lines-graph-options'></div>
+            <div class='flex-grow height480' id='multi-lines'></div>
         </section>
     </section>
 

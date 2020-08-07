@@ -74,6 +74,10 @@ li a:hover{
     overflow-y: scroll;
 }
 
+.height240 {
+    height: 240px;
+}
+
 .height320 {
     height: 320px;
 }
@@ -81,7 +85,6 @@ li a:hover{
 .height480 {
     height: 480px;
 }
-
 
 .bottom-border{
     border-bottom: solid;
