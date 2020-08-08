@@ -135,7 +135,7 @@ class TypedTabularData extends TabularData{
         
         if (dataType === 'number'){
             rows.sort((a, b) => cmpNumber(a[col], b[col]));
-        } else if (dataType === 'string'){
+        } else if (dataType === 'string' || dataType === 'string-number'){
             rows.sort((a, b) => cmpStr(a[col], b[col]));
         } else if (dataType === 'percent'){
             rows.sort((a, b) => cmpPerct(a[col], b[col]));
@@ -215,7 +215,7 @@ class TimeSeriesData extends Data {
             throw Error('TimeSeriesData.validate: key "date" is not found in object');
         }
         for (let key of Object.keys(data)){
-            if (key === 'latest'){
+            if (key === 'latest' || key === 'rate'){
                 continue;
             }
             let arr = data[key];
@@ -236,7 +236,7 @@ class TimeSeriesData extends Data {
         let newData = {};
         newData['date'] = data['date'];
         for (let key of Object.keys(data)){
-            if (key === 'date' || key === 'latest'){
+            if (key === 'date' || key === 'latest' || key === 'rate'){
                 continue;
             }
             let countryTotal = data[key]['total'];
@@ -264,7 +264,7 @@ class TimeSeriesData extends Data {
             throw Error('TimeSeriesData.validate: key "date" is not found in object');
         }
         for (let key of Object.keys(data)){
-            if (key === 'latest'){
+            if (key === 'latest' || key === 'rate'){
                 continue;
             }
             let arr = data[key];
@@ -282,7 +282,7 @@ class TimeSeriesData extends Data {
         this.countries = [];
         this.dates = data['date'];
         for (let key of Object.keys(data)){
-            if (key === 'date' || key === 'latest'){
+            if (key === 'date' || key === 'latest' || key === 'rate'){
                 continue;
             }
             let country = key;

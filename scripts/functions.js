@@ -58,21 +58,25 @@ function drawBarPie(data, barID, barName, pieID, pieName) {
 
 function drawSummaryTable(dataCollection, tableID, graphConfigID, addFilterID) {
     let deaths = dataCollection['deaths']['latest'];
+    let deathsPerCapita = dataCollection['deaths']['rate'];
     let cases = dataCollection['confirmed']['latest'];
+    let casesPerCapita = dataCollection['confirmed']['rate'];
     let recovs = dataCollection['recovered']['latest'];
 
     const countries = getKeysIntersection([deaths, cases, recovs]);
     let dataArray = [];
     for (let country of countries) {
         let death = deaths[country];
+        let deathPerCapita = deathsPerCapita[country];
         let recov = recovs[country];
         let confirmed = cases[country];
+        let confirmedPerCapita = casesPerCapita[country];
         let deathRate = floatToPerct(death / confirmed);
         let recovRate = floatToPerct(recov / confirmed);
         let resolved = floatToPerct((death + recov) / confirmed);
-        dataArray.push([country, confirmed, death, deathRate, recov, recovRate, resolved]);
+        dataArray.push([country, confirmed, confirmedPerCapita, death, deathPerCapita, deathRate, recov, recovRate, resolved]);
     }
-    let headerNames = ['Country', 'Total Cases', 'Total Deaths', 'Death Rate', 'Total Recovery', 'Receovery Rate', 'Resolved Rate'];
+    let headerNames = ['Country', 'Total Cases', 'Cases/1K pop', 'Total Deaths', 'Deaths/1M pop','Fatality Rate', 'Total Recovery', 'Receovery Rate', 'Resolved Rate'];
 
     let tabularData = new TypedTabularData(dataArray, headerNames);
     let tableView = new TypedTable(tableID, true, tabularData);

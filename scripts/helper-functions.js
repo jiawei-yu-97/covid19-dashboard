@@ -26,7 +26,10 @@ function PerctToFloat(n) {
 function getDataType(n){
     if (typeof n === 'string' && getLastItem(n) === '%'){
         return 'percent';
-    } else {
+    } else if (typeof n === 'string' && !isNaN(n)){
+        return 'string-number';
+    }
+     else {
         return typeof n;
     }
 }
@@ -166,6 +169,10 @@ function cmpNumber(a, b){
 
 
 function cmpStr(a, b){
+    if (!isNaN(Number(a)) && !isNaN(Number(b))){
+        return cmpNumber(Number(a), Number(b));
+    }
+    
     a = a.toLowerCase();
     b = b.toLowerCase();
     if (a < b) {
