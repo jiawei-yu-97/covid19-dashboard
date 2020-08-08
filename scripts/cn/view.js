@@ -59,6 +59,10 @@ class Table extends View {
     setData(data) {
         this.validate(data);
         this.data = data;
+        this.headerNames = [...data.headerNames];
+        if (this.addIndex){
+            this.headerNames.unshift('#');
+        }
     }
 
     validate(data) {
@@ -100,6 +104,15 @@ class Table extends View {
             cellNode.appendChild(document.createTextNode(a));
             this.cellFunc(cellNode, a);
             rowNode.appendChild(cellNode);
+
+            if (getDataType(a) === 'string') {
+                cellNode.style = 'text-align: center';
+            } else {
+                cellNode.style = 'text-align: right';
+            }
+            if (a === '全球'){
+                rowNode.style = 'font-style: italic; font-weight: bold;';
+            }
         }
         this.rowFunc(rowNode, arrayCopy);
         this.tableNode.appendChild(rowNode);
