@@ -66,6 +66,10 @@ table {
 th, td {
     padding: 5px;
     border-bottom: solid;
-    border-width: 0.5px;
-    border-color: var(--color-5);
+    border-bottom-width: 0.5px;
+    border-bottom-color: var(--color-5);
+
+    /*border-right: solid;
+    border-right-width: 0.2px;
+    border-right-color: var(--color-5); */
 }

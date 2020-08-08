@@ -49,13 +49,20 @@ li a:hover{
     background-color: var(--color-1);
 }
 
-
 .text-center {
     text-align: center;
 }
 
+.text-right{
+    text-align: right;
+}
+
 .text-italics {
     font-style: italic;
+}
+
+.text-bold {
+    font-weight: bold;
 }
 
 .flex-display{
