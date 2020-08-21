@@ -10,7 +10,8 @@ jobs:
     steps:
     - run: ls -l 
       working-directory: ../
-    - run: pwd
+    - working-directory: ../
+      run: pwd
     - working-directory: ../
       run: python ./data.py
     
