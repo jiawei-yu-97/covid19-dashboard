@@ -8,5 +8,5 @@ jobs:
   fetch_data:
     runs-on: ubuntu-latest
     steps:
-    - run: python3 ./data.py
+    - run: python ./data.py
     
