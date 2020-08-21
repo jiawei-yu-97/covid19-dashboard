@@ -2,7 +2,7 @@ name: Fetch Data
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '* * * * 0'
 
 jobs:
   fetch_data:
