@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2.1.0
-    - run: pwd
+    - run: ls
+    - run: pip install pandas
     - run: python data.py
     
