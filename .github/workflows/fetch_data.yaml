@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: ls -l 
-      working-directory: ./
+      working-directory: ../
     - run: pwd
-    - working-directory: ./
+    - working-directory: ../
       run: python ./data.py
     
