@@ -1,0 +1,13 @@
+name: Fetch Data
+
+on:
+  schedule:
+    - cron: '/5 * * * *'
+
+jobs:
+  fetch_data:
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+      python3 ../../data.py
+    
