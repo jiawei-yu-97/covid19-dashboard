@@ -9,6 +9,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2.1.0
     - run: ls
-    - run: pip install pandas
-    - run: python data.py
+    - run: pip3 install pandas
+    - run: python3 data.py
     
