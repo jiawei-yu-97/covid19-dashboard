@@ -9,9 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: ls -l 
-      working-directory: ../
-    - working-directory: ../
+      working-directory: ~/covid19-dashboard
+    - working-directory: ~/covid19-dashboard
       run: pwd
-    - working-directory: ../
-      run: python ./data.py
+    - run: python data.py
     
