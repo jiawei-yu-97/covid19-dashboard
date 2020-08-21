@@ -7,10 +7,7 @@ import pandas as pd
 import json
 from datetime import datetime
 import os
-try: #python3
-    from urllib.request import urlretrieve
-except: #python2
-    from urllib2 import urlretrieve
+from urllib.request import urlretrieve
 
 
 ########## metadata processing ##########
