@@ -1,11 +1,10 @@
 name: Fetch Data
 
-on: push
+on: 
+  schedule:
+    cron: '0 */6 * * *'
 
 jobs:
-  schedule:
-    cron: '0 */12 * * *'
-
     steps:
     - uses: actions/checkout@v2.1.0
     - run: pip3 install pandas
