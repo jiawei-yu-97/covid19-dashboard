@@ -8,7 +8,9 @@ jobs:
   fetch_data:
     runs-on: ubuntu-latest
     steps:
-    - run: ls -l
+    - run: ls -l 
+      working-directory: ./
     - run: pwd
-    - run: python ./data.py
+    - working-directory: ./
+      run: python ./data.py
     
