@@ -8,9 +8,5 @@ jobs:
   fetch_data:
     runs-on: ubuntu-latest
     steps:
-    - run: ls -l 
-      working-directory: ~/covid19-dashboard
-    - working-directory: ~/covid19-dashboard
-      run: pwd
     - run: python data.py
     
