@@ -3,8 +3,8 @@ name: Fetch Data
 on: push
 
 jobs:
-  fetch_data:
-    runs-on: ubuntu-latest
+  schedule:
+    cron: '0 */12 * * *'
 
     steps:
     - uses: actions/checkout@v2.1.0
@@ -20,4 +20,3 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        
