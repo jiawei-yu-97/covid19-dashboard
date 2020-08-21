@@ -5,6 +5,7 @@ on:
     - cron: '0 */6 * * *'
 
 jobs:
+  fetch_data:
     steps:
     - uses: actions/checkout@v2.1.0
     - run: pip3 install pandas
