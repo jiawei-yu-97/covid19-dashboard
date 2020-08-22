@@ -6,17 +6,18 @@ on:
 
 jobs:
   fetch_data:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2.1.0
-    - run: pip3 install pandas
-    - run: python3 data.py
+      - uses: actions/checkout@v2.1.0
+      - run: pip3 install pandas
+      - run: python3 data.py
 
-    - name: Commit files
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git commit -m "Add changes" -a
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Add changes" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
