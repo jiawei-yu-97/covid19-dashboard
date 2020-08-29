@@ -244,7 +244,7 @@ def writeToJS(filenames, to_chinese=False):
 
 
 if __name__ == "__main__":
-    data_dir = './covid/data/'
+    data_dir = 'covid/data/'
     if not os.path.exists(data_dir):
         os.mkdir(data_dir)
 
