@@ -1,8 +1,11 @@
 name: Fetch Data
 
-on: 
-  schedule:
-    - cron: '0 */6 * * *'
+on:
+  push
+  
+#on: 
+#  schedule:
+#    - cron: '0 */6 * * *'
 
 jobs:
   fetch_data:
@@ -10,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2.1.0
       - run: pip3 install pandas
-      - run: python3 data.py
+      - run: python3 covid/data.py
 
       - name: Commit files
         run: |

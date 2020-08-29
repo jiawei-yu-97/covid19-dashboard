@@ -1,4 +1,3 @@
 
-.github/workflows/*
 TODOs.txt
-data/*.csv
+covid/data/*.csv
