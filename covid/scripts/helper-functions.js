@@ -61,6 +61,25 @@ function getNode(nodeID){
 }
 
 
+function selectColor(number) {
+    let r = (number + 13) * 59 % 255;
+    let g = (number + 7) * 73 % 255;
+    let b = (number + 11) * 67 % 255;
+    return {r: r, g: g, b: b};
+}
+
+
+function getColorsDict(names){
+    let i = 0;
+    let colors = {};
+    for (let name of names){
+        colors[name] = selectColor(i);
+        i += 17;
+    }
+    return colors;
+}
+
+
 /*************** 
 Array Functions
 ****************/

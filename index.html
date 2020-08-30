@@ -8,24 +8,169 @@
     <meta name="author" content="Jiawei Yu">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     <link rel="icon" href="icon.png">
-    
-    <title>Charlie Yu</title>
+
+    <script src="covid/scripts/plotly-latest.min.js"></script>
+    <script src="covid/scripts/helper-functions.js" defer></script>
+
+    <script src="covid/scripts/data.js" defer></script>
+    <script src="covid/scripts/view.js" defer></script>
+    <script src="covid/scripts/control.js" defer></script>
+
+    <script src="covid/data/data-collection.js" defer></script>
+    <script src="covid/scripts/functions.js" defer></script>
+    <script src="covid/scripts/dashboard.js" defer></script>
+    <title>COVID Dashboard - Jiawei Yu</title>
 </head>
 
 <body>
-    <header>
-        <div class='nav-menu'>
-            <nav>
-                <ul>
-                    <li class='menu-item'><a href="index.html">About Me</a></li>
-                    <li class='menu-item'><a href="covid/aggregate.html">COVID-19 Dashboard</a></li>
-                </ul>
-            </nav>
+    <div class='nav-menu'>
+        <div class='dropdown'>
+            <div class='menu-item dropdown-btn'><a href="#dashboard-header">Dashboard Menu</a></div>
+
+            <div class='dropdown-content'>
+                <div class='menu-item'><a href="#section-table">Table</a></div>
+                <div class='menu-item'><a href="#section-daily">Daily</a></div>
+                <div class='menu-item'><a href="#section-aggregate">Aggregate</a></div>
+            </div>
         </div>
-    </header>
+        
+        <div class='menu-item flex-last'><a href="#about">About Me</a></div>
+    </div>
+
+    <section class='bottom-border content' id='dashboard-header'>
+        <h1 class='text-center'>COVID-19: Interactive Data Visualization - Comparing Global Performance</h1>
+        <div>
+            Welcome to my COVID-19 dashboard. <br>
+            Here you can play around with different kinds of data representation and visualizations, 
+            and compare the COVID-19 situation in each country using interactive tools. <br>
+            Customized graphs can be downloaded using the camera icon at the top of each graph (hover on a graph to see the options).
+        </div>
+        <div class='text-italics text-bold' id='footer-1'></div>
+
+        <div class='text-right text-italics'>
+            Data source: <a href='https://data.humdata.org/'>Centre for Humanitarian Data of the United Nations</a>
+        </div>
+        <div class='text-right text-italics'>
+            Powered by <a href='https://plotly.com/'>Plotly</a>
+        </div>
+    </section>
+
+
+    <section class='bottom-border content' id='section-table'>
+        <h1 class='text-center'>Summary Table</h1>
+        <div class='text-center text-italics''>Some countries do not report recovery figures.</div>
+
+        <section class='flex-display center config-table-area'>
+            <div class='graph-config', id='summary-table-config'>
+                <h4 style='text-align: center;'>Data Filters</h4>
+                <div>
+                    <button id='add-table-filter'>Add Filter</button>
+                </div>
+            </div>
+
+            <div class='table-area scroll-y height480'>
+                <table class='regions-table' id='summary-table'></table>
+            </div>
+        </section>
+    </section>
+
+
+    <section class='bottom-border content' id='section-daily'>
+        <h1 class='text-center'>Daily Change</h1>
+
+        <div class='text-bold'>
+            Currently displaying:
+            <select id='section-daily-select'></select>
+        </div>
+
+        <section id='section-new-cases'>
+            <section class='plotting flex-display'>
+                <div class='flex-grow' id='new-cases-bar'></div>
+                <div class='flex-grow' id='new-cases-pie'></div>
+            </section>
+    
+            <section class="plotting flex-display">
+                <div class='graph-config' id='new-cases-graph-options'></div>
+                <div class='flex-grow height480' id='new-cases-lines'></div>
+            </section>
+        </section>
+
+        <section id='section-new-deaths'>
+            <section class='plotting flex-display'>
+                <div class='flex-grow' id='new-deaths-bar'></div>
+                <div class='flex-grow' id='new-deaths-pie'></div>
+            </section>
+    
+            <section class="plotting flex-display">
+                <div class='graph-config' id='new-deaths-graph-options'></div>
+                <div class='flex-grow height480' id='new-deaths-lines'></div>
+            </section>
+        </section>
+
+
+        <h1 class='text-center'>Daily Cases and Deaths</h1>
+        <section class="plotting flex-display">
+            <div class='graph-config' id='daily-multi-lines-graph-options'></div>
+            <div class='flex-grow height480' id='daily-multi-lines'></div>
+        </section>
+    </section>
+
+
+
+    <section class='bottom-border content' id='section-aggregate'>
+        <h1 class='text-center'>Aggregate Data</h1>
+
+        <div class='text-bold'>
+            Currently displaying:
+            <select id='section-aggregate-select'></select>
+        </div>
+
+        <section id='section-aggregate-cases'>
+            <div class='plotting flex-display'>
+                <div class='flex-grow' id='all-cases-bar'></div>
+                <div class='flex-grow' id='all-cases-pie'></div>
+            </div>
+    
+            <div class="plotting flex-display">
+                <div class='graph-config' id='all-cases-graph-options'></div>
+                <div class='flex-grow height480' id='all-cases-lines'></div>
+            </div>
+        </section>
+
+        <section id='section-aggregate-deaths'>
+            <div class='plotting flex-display'>
+                <div class='flex-grow' id='deaths-cases-bar'></div>
+                <div class='flex-grow' id='deaths-cases-pie'></div>
+            </div>
+    
+            <div class="plotting flex-display">
+                <div class='graph-config' id='deaths-cases-graph-options'></div>
+                <div class='flex-grow height480' id='deaths-cases-lines'></div>
+            </div>
+        </section>
+        
+
+        <h1 class='text-center'>Active Cases, Deaths and Recoveries</h1>
+        <div class='text-center text-italics''>Some countries do not report recovery figures.</div>
+        <section class="plotting flex-display">
+            <div class='graph-config' id='aggregate-multi-lines-graph-options'></div>
+            <div class='flex-grow height480' id='aggregate-multi-lines'></div>
+        </section>
+    </section>
+
+
+    <section class='content about' id='about'>
+        <h1 class='text-center'>About Me</h1>
+        A copy of my resume is <a href='resume.pdf' target="_blank">here</a>.
+        <br>
+        My Email: <span class='text-italics'> jiawei.yu@mail.utoronto.ca</span>
+        <br>
+        My <a href = 'https://www.linkedin.com/in/charlieyu7/'>Linkedin</a>
+    </section>
 
 </body>
 
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/covid.css">
 
 </html>

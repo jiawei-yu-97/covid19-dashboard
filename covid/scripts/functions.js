@@ -1,10 +1,11 @@
 function drawLineGraph(data, dataName, lineGraphID, graphOptionsID){
     let tabularData = new TypedTabularData(objToArray(data['latest']), ['country', dataName]);
-    
-    let lineGraph = new LineGraph(lineGraphID, null, 'lines+markers');
-    lineGraph.setLayout({title: dataName + ' per day'});
     let timeSeriesData = TimeSeriesData.fromProcessedDict(data);
-
+    
+    let colors = getColorsDict(timeSeriesData.seriesNames);
+    let lineGraph = new LineGraph(lineGraphID, null, 'lines', colors);
+    lineGraph.setLayout({title: dataName + ' per day'});
+    
     let graphOptionsNode = getNode(graphOptionsID)
     let combinedControl = new TimeSeriesCombinedControl(lineGraph, timeSeriesData, tabularData, graphOptionsNode,dataName);
     combinedControl.makeLogControl('Use Log Scale');
@@ -18,10 +19,10 @@ function drawLineGraph(data, dataName, lineGraphID, graphOptionsID){
 }
 
 
-function drawMultipleAxesLineGraph(dataArray, dataNames, axes, lineGraphID, graphOptionsID, controlName){
-    let tabularData = new TypedTabularData(objToArray(dataArray[0]['latest']), ['country', dataNames[0]]);
+function drawMultipleAxesLineGraph(dataArray, dataNames, axes, lineGraphID, graphOptionsID, controlName, tableColumnIndex){
+    let tabularData = new TypedTabularData(objToArray(dataArray[tableColumnIndex]['latest']), ['country', dataNames[tableColumnIndex]]);
 
-    let lineGraph = new MultipleAxesLineGrpah(lineGraphID, null, axes, 'lines+markers');
+    let lineGraph = new MultipleAxesLineGrpah(lineGraphID, null, axes, 'lines');
     lineGraph.setLayout({title: 'Cases per day'});
     let multiTimeSeriesData = MultiTimeSeriesData.fromProcessedDict(dataArray, dataNames);
 
@@ -97,6 +98,32 @@ function drawSummaryTable(dataCollection, tableID, graphConfigID, addFilterID) {
     tableFilter.makeControlArea();
 }
 
+
+function setSelectToggler(selectID, names, secIDs){
+    if (names.length !== secIDs.length) {
+        console.log('setSelectToggler: names and secIDs have different lengths.');
+    }
+    let selectNode = document.getElementById(selectID);
+    for (let i=0; i<names.length; i++){
+        let optionNode = document.createElement('option');
+        optionNode.innerHTML = names[i];
+        optionNode.setAttribute('value', names[i]);
+        selectNode.appendChild(optionNode);
+        if (i !== 0){
+            document.getElementById(secIDs[i]).style.display='none';
+        }
+    }
+
+    selectNode.addEventListener('change', function() {
+        for (let i=0; i<names.length; i++){
+            if (this.value === names[i]){
+                document.getElementById(secIDs[i]).style.display='block';
+            } else {
+                document.getElementById(secIDs[i]).style.display='none';
+            }
+        }
+    })
+}
 
 //window.addEventListener('resize', function() {
 //    location.reload();

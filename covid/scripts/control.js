@@ -626,7 +626,7 @@ class TimeSeriesLogScale extends Control {
 
 
 class TimeSeriesCombinedControl extends Control {
-    constructor(graph, graphData, tableData, parentNode, name, ){
+    constructor(graph, graphData, tableData, parentNode, name){
         super(graph, graphData);
         this.graph = graph;
         this.graphData = graphData;

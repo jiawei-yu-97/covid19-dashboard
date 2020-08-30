@@ -413,9 +413,12 @@ class MultipleAxesLineGrpah extends LineGraph {
             },
             name: dataName
         }
-        if (dataName in this.axes){
+        if (Object.keys(this.axes).length === 0) {
+            trace['stackgroup'] = 1;
+        } else if (dataName in this.axes){
             trace['yaxis'] = this.axes[dataName];
         }
+        
         return trace;
     }
 
