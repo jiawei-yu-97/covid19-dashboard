@@ -123,12 +123,12 @@ function drawSummaryTable(dataCollection, tableID, graphConfigID, addFilterID) {
 
     headerControl.setHeaderEventListeners();
     headerControl.display();
-    // Sort by the Total Cases column
-    headerControl.sortTable(3);
-    headerControl.sortTable(3);
     addFilterButton.onclick = function () {
         tableFilter.makeControlArea();
     }
+    // Sort by the Total Cases column
+    headerControl.sortTable(3);
+    headerControl.sortTable(3);
     tableFilter.makeControlArea();
 }
 
