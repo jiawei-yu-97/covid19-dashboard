@@ -1,11 +1,11 @@
 name: Fetch Data
 
-#on:
-#  push
+on:
+  push
   
-on: 
-  schedule:
-    - cron: '0 */6 * * *'
+#on: 
+#  schedule:
+#    - cron: '0 */6 * * *'
 
 jobs:
   fetch_data:
