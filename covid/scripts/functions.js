@@ -39,12 +39,20 @@ function drawMultipleAxesLineGraph(dataArray, dataNames, axes, lineGraphID, grap
 }
 
 
-function drawBarPie(data, barID, barName, pieID, pieName) {
+function drawBarPie(data, barID, barName, pieID, pieName, smoothing=1) {
+    data = copyObj(data);
+    data = smoothData(data, smoothing);
     data = data['latest'];
+
     data = objToArray(data);
     let headerNames = ['country', 'cases'];
     tabularData = new TypedTabularData(data, headerNames);
 
+    if (smoothing > 1) {
+        barName = barName + ', ' + smoothing + '-day average';
+        pieName = pieName + ', ' + smoothing + '-day average';
+    }
+    
     pieGraph = new PieGraph(pieID, tabularData, 0, 1);
     pieGraph.setLayout({'title': pieName});
     pieControl = new PieControl(pieGraph, tabularData, 9);
@@ -57,6 +65,26 @@ function drawBarPie(data, barID, barName, pieID, pieName) {
 }
 
 
+function drawChoropleth(data, graphID, graphName, smoothing=1, zmax=null){
+    data = copyObj(data);
+    data = smoothData(data, smoothing);
+    data = data['latest'];
+
+    data['World'] = 0;
+    data = objToArray(data);
+    let headerNames = ['country', 'cases'];
+    tabularData = new TypedTabularData(data, headerNames);
+
+    choroplethGraph = new ChoroplethGraph(graphID, tabularData, 0, 1);
+    if (smoothing > 1) {
+        graphName = graphName + ', ' + smoothing + '-day average';
+    }
+    choroplethGraph.setLayout({'title': graphName});
+    choroplethGraph.graphData['zmax'] = zmax;
+    choroplethGraph.display();
+}
+
+
 function drawSummaryTable(dataCollection, tableID, graphConfigID, addFilterID) {
     let deaths = dataCollection['deaths']['latest'];
     let deathsPerCapita = dataCollection['deaths']['rate'];
@@ -64,20 +92,25 @@ function drawSummaryTable(dataCollection, tableID, graphConfigID, addFilterID) {
     let casesPerCapita = dataCollection['confirmed']['rate'];
     let recovs = dataCollection['recovered']['latest'];
 
+    let newCases = dataCollection['confirmed_daily']['latest'];
+    let newDeaths = dataCollection['deaths_daily']['latest'];
+
     const countries = getKeysIntersection([deaths, cases, recovs]);
     let dataArray = [];
     for (let country of countries) {
         let death = deaths[country];
+        let newDeath = newDeaths[country];
         let deathPerCapita = deathsPerCapita[country];
         let recov = recovs[country];
         let confirmed = cases[country];
+        let newConfirmed = newCases[country];
         let confirmedPerCapita = casesPerCapita[country];
         let deathRate = floatToPerct(death / confirmed);
         let recovRate = floatToPerct(recov / confirmed);
         let resolved = floatToPerct((death + recov) / confirmed);
-        dataArray.push([country, confirmed, confirmedPerCapita, death, deathPerCapita, deathRate, recov, recovRate, resolved]);
+        dataArray.push([country, newConfirmed, newDeath, confirmed, confirmedPerCapita, death, deathPerCapita, deathRate, recov, recovRate, resolved]);
     }
-    let headerNames = ['Country', 'Total Cases', 'Cases/1K pop', 'Total Deaths', 'Deaths/1M pop','Fatality Rate', 'Total Recovery', 'Receovery Rate', 'Resolved Rate'];
+    let headerNames = ['Country', 'New Cases', 'New Deaths', 'Total Cases', 'Cases/1K pop','Total Deaths', 'Deaths/1M pop','Fatality Rate', 'Total Recovery', 'Receovery Rate', 'Resolved Rate'];
 
     let tabularData = new TypedTabularData(dataArray, headerNames);
     let tableView = new TypedTable(tableID, true, tabularData);
@@ -117,14 +150,10 @@ function setSelectToggler(selectID, names, secIDs){
     selectNode.addEventListener('change', function() {
         for (let i=0; i<names.length; i++){
             if (this.value === names[i]){
-                document.getElementById(secIDs[i]).style.display='block';
+                document.getElementById(secIDs[i]).style.display='inline';
             } else {
                 document.getElementById(secIDs[i]).style.display='none';
             }
         }
     })
 }
-
-//window.addEventListener('resize', function() {
-//    location.reload();
-//})

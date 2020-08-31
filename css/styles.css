@@ -111,7 +111,7 @@ h1 {
 .flex-grow{
     flex-grow: 1;
     flex-shrink: 1;
-    flex-basis: 320px;
+    flex-basis: 480px;
 }
 
 .scroll-y {

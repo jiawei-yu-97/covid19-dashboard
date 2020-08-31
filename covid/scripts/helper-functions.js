@@ -8,6 +8,16 @@ const color3 = "#134074";
 const color4 = "#8DA9C4";
 const color5 = "#EEf4ED";
 
+
+function copyObj(obj){
+    let newObj = {};
+    for (name of Object.keys(obj)){
+        newObj[name] = obj[name];
+    }
+    return newObj;
+}
+
+
 function isSubStr(str, substr){
     return String(str).indexOf(String(substr)) !== -1;
 }
@@ -129,32 +139,39 @@ function smoothSeries(series, window) {
     let halfWindow = Math.floor((window) / 2);
     let smooths = [];
     for (let i = 0; i < series.length; i++) {
-        let n = series[i];
         let leftIndex = Math.max(0, i - halfWindow);
         let rightIndex = Math.min(series.length, i + halfWindow + 1);
+        if (rightIndex - leftIndex < window) {
+            if (leftIndex === 0){
+                rightIndex += window - (rightIndex - leftIndex);
+            } else {
+                leftIndex -= window - (rightIndex - leftIndex);
+            }
+        }
         let smoothed = sum(series.slice(leftIndex, rightIndex)) / (rightIndex - leftIndex);
         smooths.push(Math.floor(smoothed));
     }
-    return smooths
+    return smooths;
 }
 
 
 function smoothData(data, window) {
     let newData = {};
+    newData['latest'] = {};
+    newData['date'] = data['date'];
+    newData['rate'] = data['rate'];
     for (let key of Object.keys(data)) {
-        if (key === 'date' || key === 'latest') {
-            newData[key] = data[key];
-        }
-        else {
+        if (key !== 'latest' && key !== 'date' && key !== 'rate'){
             let country = key;
-            let countryData = {};
-            countryData['latest'] = data[country]['latest'];
+            let countryData = {'latest': {}};
             for (let key2 of Object.keys(data[country])) {
                 if (key2 !== 'latest') {
                     countryData[key2] = smoothSeries(data[country][key2], window);
+                    countryData['latest'][key2] = getLastItem(countryData[key2]);
                 }
             }
             newData[country] = countryData;
+            newData['latest'][country] = getLastItem(countryData['total'])
         }
     }
     return newData;

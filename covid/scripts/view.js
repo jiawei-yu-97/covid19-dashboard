@@ -256,6 +256,32 @@ class FlatGraph extends PlotlyGraph {
 }
 
 
+class ChoroplethGraph extends FlatGraph {
+    constructor(graphID, data = null, labelCol = null, dataCol = null){
+        super(graphID, data, labelCol, dataCol);
+        this.xname = 'locations';
+        this.yname = 'z';
+        this.setData(data, labelCol, dataCol);
+    }
+
+    defaultLayout() {
+        let layout = super.defaultLayout();
+        layout['geo'] = {
+            projection: {type: 'robinson'}
+        };
+        return layout;
+    }
+
+    getGraphData(data = this.data, labelCol = this.labelCol, dataCol = this.dataCol) {
+        let graphData = super.getGraphData(data, labelCol, dataCol);
+        graphData['type'] = 'choropleth';
+        graphData['locationmode'] = 'country names';
+        graphData['zmin'] = 0;
+        return graphData;
+    }
+}
+
+
 class BarGraph extends FlatGraph {
     constructor(graphID, data = null, labelCol = null, dataCol = null) {
         super(graphID, data, labelCol, dataCol);

@@ -29,7 +29,7 @@
 
             <div class='dropdown-content'>
                 <div class='menu-item'><a href="#section-table">Table</a></div>
-                <div class='menu-item'><a href="#section-daily">Daily</a></div>
+                <div class='menu-item'><a href="#section-daily">New Cases</a></div>
                 <div class='menu-item'><a href="#section-aggregate">Aggregate</a></div>
             </div>
         </div>
@@ -51,16 +51,19 @@
             Data source: <a href='https://data.humdata.org/'>Centre for Humanitarian Data of the United Nations</a>
         </div>
         <div class='text-right text-italics'>
-            Powered by <a href='https://plotly.com/'>Plotly</a>
+            Powered by <a href='https://plotly.com/javascript/'>Plotly</a>
         </div>
     </section>
 
 
     <section class='bottom-border content' id='section-table'>
         <h1 class='text-center'>Summary Table</h1>
-        <div class='text-center text-italics''>Some countries do not report recovery figures.</div>
+        <div class='text-center text-italics''>Some countries do not report recovery figures or delay significantly.</div>
+        <div class='text-center text-italics''>
+            Some countries report lower numbers during weekends due to health officials not working.
+        </div>
 
-        <section class='flex-display center config-table-area'>
+        <section class='config-table-area flex-display center'>
             <div class='graph-config', id='summary-table-config'>
                 <h4 style='text-align: center;'>Data Filters</h4>
                 <div>
@@ -78,12 +81,16 @@
     <section class='bottom-border content' id='section-daily'>
         <h1 class='text-center'>Daily Change</h1>
 
-        <div class='text-bold'>
-            Currently displaying:
+        <div class='text-bold center'>
+            Currently displaying: &nbsp;
             <select id='section-daily-select'></select>
         </div>
 
         <section id='section-new-cases'>
+            <section class='plotting'>
+                <div class='flex-grow center' id='new-cases-choropleth'></div>
+            </section>
+
             <section class='plotting flex-display'>
                 <div class='flex-grow' id='new-cases-bar'></div>
                 <div class='flex-grow' id='new-cases-pie'></div>
@@ -96,6 +103,10 @@
         </section>
 
         <section id='section-new-deaths'>
+            <section class='plotting'>
+                <div class='flex-grow center' id='new-deaths-choropleth'></div>
+            </section>
+
             <section class='plotting flex-display'>
                 <div class='flex-grow' id='new-deaths-bar'></div>
                 <div class='flex-grow' id='new-deaths-pie'></div>
@@ -120,12 +131,16 @@
     <section class='bottom-border content' id='section-aggregate'>
         <h1 class='text-center'>Aggregate Data</h1>
 
-        <div class='text-bold'>
-            Currently displaying:
+        <div class='text-bold center'>
+            Currently displaying: &nbsp;
             <select id='section-aggregate-select'></select>
         </div>
 
         <section id='section-aggregate-cases'>
+            <section class='plotting'>
+                <div class='flex-grow' id='all-cases-choropleth'></div>
+            </section>
+
             <div class='plotting flex-display'>
                 <div class='flex-grow' id='all-cases-bar'></div>
                 <div class='flex-grow' id='all-cases-pie'></div>
@@ -138,6 +153,10 @@
         </section>
 
         <section id='section-aggregate-deaths'>
+            <section class='plotting'>
+                <div class='flex-grow' id='all-deaths-choropleth'></div>
+            </section>
+
             <div class='plotting flex-display'>
                 <div class='flex-grow' id='deaths-cases-bar'></div>
                 <div class='flex-grow' id='deaths-cases-pie'></div>
@@ -151,7 +170,7 @@
         
 
         <h1 class='text-center'>Active Cases, Deaths and Recoveries</h1>
-        <div class='text-center text-italics''>Some countries do not report recovery figures.</div>
+        <div class='text-center text-italics''>Some countries do not report recovery figures or delay significantly.</div>
         <section class="plotting flex-display">
             <div class='graph-config' id='aggregate-multi-lines-graph-options'></div>
             <div class='flex-grow height480' id='aggregate-multi-lines'></div>
