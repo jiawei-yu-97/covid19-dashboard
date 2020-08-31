@@ -263,5 +263,5 @@ if __name__ == "__main__":
     alias, chinese, population = get_metadata_dict(filename=data_dir+'metadata.csv')
 
     writeToJS(['confirmed', 'deaths', 'recovered', 'active'])
-    writeToJS(['confirmed', 'deaths', 'recovered', 'active'], True)
+    # writeToJS(['confirmed', 'deaths', 'recovered', 'active'], True)
 
