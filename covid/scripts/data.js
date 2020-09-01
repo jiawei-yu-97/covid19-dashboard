@@ -155,6 +155,7 @@ class TypedTabularData extends TabularData{
     }
 
     filterByStr(col, str){
+        str = str.toLowerCase();
         let rows = this.rows.filter(array => isSubStr(String(array[col]).toLowerCase(), str));
         return new TypedTabularData(rows, this.headerNames, false);
     }
