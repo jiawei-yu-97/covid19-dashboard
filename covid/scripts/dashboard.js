@@ -17,17 +17,17 @@ function drawFlats(type) {
     } else if (type === 'aggregate') {
         data = dataCollection[mode];
     }
-    if (mode === 'confirmed') {
-        mode = 'cases';
-    }
     let rateUnit = 0;
     let population = {};
     if (document.getElementById(type + '-cases-per-capita-toggle').checked) {
         rateUnit = 1000000;
-        if (mode === 'cases' && type === 'aggregate') {
+        if (mode === 'confirmed' && type === 'aggregate') {
             rateUnit = 1000;
         }
         population = dataCollection['population'];
+    }
+    if (mode === 'confirmed') {
+        mode = 'cases';
     }
     mode = type + ' ' + mode;
 
@@ -52,15 +52,17 @@ function drawGraphs(type) {
     let data = null;
     if (type === 'new') {
         data = dataCollection[mode + '_daily'];
-        mode = type + ' cases';
 
         document.getElementById(type + '-cases-smoothing-select').onchange = function () {
             drawFlats(type);
         }
     } else if (type === 'aggregate') {
         data = dataCollection[mode];
-        mode = type + ' deaths';
     }
+    if (mode === 'confirmed') {
+        mode = 'cases';
+    }
+    mode = type + ' ' + mode;;
 
     drawLineGraph(data,
         mode,
@@ -87,6 +89,7 @@ drawGraphs('new');
 drawGraphs('aggregate');
 
 drawMultipleAxesLineGraph(
+    'new cases and deaths per day',
     [dataCollection['confirmed_daily'], dataCollection['deaths_daily']],
     ['new cases', 'new deaths'],
     { 'new deaths': 'y2' },
@@ -97,6 +100,7 @@ drawMultipleAxesLineGraph(
 );
 
 drawMultipleAxesLineGraph(
+    "cumulative active, deaths and recovered cases",
     [dataCollection['recovered'], dataCollection['deaths'], dataCollection['active']],
     ['recovered', 'deaths', 'active'],
     {},

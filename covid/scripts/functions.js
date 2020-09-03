@@ -22,11 +22,11 @@ function drawLineGraph(data, dataName, lineGraphID, graphOptionsID) {
 }
 
 
-function drawMultipleAxesLineGraph(dataArray, dataNames, axes, lineGraphID, graphOptionsID, controlName, tableColumnIndex) {
+function drawMultipleAxesLineGraph(title, dataArray, dataNames, axes, lineGraphID, graphOptionsID, controlName, tableColumnIndex) {
     let tabularData = new TypedTabularData(objToArray(dataArray[tableColumnIndex]['latest']), ['country', dataNames[tableColumnIndex]]);
 
     let lineGraph = new MultipleAxesLineGrpah(lineGraphID, null, axes, 'lines');
-    lineGraph.setLayout({ title: 'Cases per day' });
+    lineGraph.setLayout({ title: title});
     let multiTimeSeriesData = MultiTimeSeriesData.fromProcessedDict(dataArray, dataNames);
 
     let graphOptionsNode = getNode(graphOptionsID);
