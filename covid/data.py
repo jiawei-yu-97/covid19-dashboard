@@ -153,8 +153,8 @@ def get_active_cases(confirmed, recovered, deaths):
 #   world: {total: [count1, count2,]},
 #   country1: {total:[count1, count2,], latest:[(province1, count1), (province2, count2)],
 #               province1:[count1, count2,], province2:[count1, count2],}}
-def df_to_dict(df, to_chinese=False, rate_base = 1000):
-    ret = {'date': df['date'].tolist(), 'latest': []}
+def df_to_dict(df):
+    ret = {'date': df['date'].tolist(), 'latest': [], 'population':{}}
     ret['date'] = df['date'].tolist()
 
     # add data to the dictionary, one region at a time
@@ -164,10 +164,7 @@ def df_to_dict(df, to_chinese=False, rate_base = 1000):
         region_data = df[col].tolist()
         if '.' in col:  # a provincial region
             country, province = col.split('.')
-            if to_chinese:
-                country = chinese[country]
-            else:
-                country=alias[country]
+            country=alias[country]
 
             if country in ret:
                 ret[country][province] = region_data
@@ -176,10 +173,7 @@ def df_to_dict(df, to_chinese=False, rate_base = 1000):
                 ret[country] = {'latest': [(province, region_data[-1])], province: region_data}
         else:
             country = col
-            if to_chinese:
-                country = chinese[country]
-            else:
-                country=alias[country]
+            country=alias[country]
 
             if country in ret:
                 ret[country]['total'] = region_data
@@ -191,25 +185,16 @@ def df_to_dict(df, to_chinese=False, rate_base = 1000):
     ret['latest'] = sorted(ret['latest'], key=lambda t: t[1], reverse=True)
     ret['latest'] = {t[0]: t[1] for t in ret['latest']}
 
-    ret['rate'] = {}
-    for country, value in ret['latest'].items():
-        if population[country] == 0:
-            ret['rate'][country] = '0.000'
-        else:
-            rate = float(value/population[country] * rate_base)
-            rate = '{:.2f}'.format(rate)
-            ret['rate'][country] = rate
-
     for country in ret:
-        if country not in ['date', 'latest', 'World','rate']:
+        if country not in ['date', 'latest', 'World', 'population']:
             ret[country]['latest'] = sorted(ret[country]['latest'], key=lambda t: t[1], reverse=True)
             ret[country]['latest'] = {t[0]: t[1] for t in ret[country]['latest']}
 
     return ret
 
 
-def getDataCollection(filenames, to_chinese=False):
-    data = {}
+def getDataCollection(filenames):
+    data = {'population': {}}
     for file_name in filenames:
         print('Processing {}'.format(file_name))
         if file_name == 'active':
@@ -217,28 +202,26 @@ def getDataCollection(filenames, to_chinese=False):
                                            df_preprocess_from_file('recovered'), \
                                            df_preprocess_from_file('deaths')
             df = get_active_cases(confirmed, recovered, deaths)
-            data[file_name] = df_to_dict(df, to_chinese)
+            data[file_name] = df_to_dict(df)
         else:
             df = df_preprocess_from_file(file_name)
+            data[file_name] = df_to_dict(df)
+
             daily_increase = df_daily_increase(df)
-            if file_name == 'deaths':
-                rate_base = 1000000
-            else:
-                rate_base = 1000
-            data[file_name] = df_to_dict(df, to_chinese, rate_base)
-            data[file_name + '_daily'] = df_to_dict(daily_increase, to_chinese)
+            data[file_name + '_daily'] = df_to_dict(daily_increase)
+
+    for country in population:
+        data['population'][country] = population[country]
+
     return data
 
 
-def writeToJS(filenames, to_chinese=False):
-    data = getDataCollection(filenames, to_chinese)
+def writeToJS(filenames):
+    data = getDataCollection(filenames)
     jsonString = json.dumps(data)
     jsonString = 'const dataCollection = \n' + jsonString
 
     outfile = data_dir + 'data-collection.js'
-    if to_chinese:
-        outfile = data_dir + 'data-collection-cn.js'
-
     with open(outfile, 'w') as out:
         out.write(jsonString)
 
@@ -249,6 +232,7 @@ if __name__ == "__main__":
         os.mkdir(data_dir)
 
     print('Retriveing data.')
+
     # data retrived from https://data.humdata.org/dataset/novel-coronavirus-2019-ncov-cases
     confirmed_url = 'https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_global.csv&filename=time_series_covid19_confirmed_global.csv'
     urlretrieve(confirmed_url, data_dir + 'confirmed.csv')
@@ -263,5 +247,4 @@ if __name__ == "__main__":
     alias, chinese, population = get_metadata_dict(filename=data_dir+'metadata.csv')
 
     writeToJS(['confirmed', 'deaths', 'recovered', 'active'])
-    # writeToJS(['confirmed', 'deaths', 'recovered', 'active'], True)
 

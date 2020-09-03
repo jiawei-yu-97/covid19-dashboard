@@ -90,6 +90,18 @@ function getColorsDict(names){
 }
 
 
+function getRate(data, population, unit=1000000) {
+    rates = {}
+    for (let key of Object.keys(data)){
+        if (key in population) {
+            rate = (data[key] / population[key] * unit).toFixed(2);
+            rates[key] = rate;
+        }
+    }
+    return rates;
+}
+
+
 /*************** 
 Array Functions
 ****************/
@@ -159,9 +171,9 @@ function smoothData(data, window) {
     let newData = {};
     newData['latest'] = {};
     newData['date'] = data['date'];
-    newData['rate'] = data['rate'];
+    newData['population'] = data['population'];
     for (let key of Object.keys(data)) {
-        if (key !== 'latest' && key !== 'date' && key !== 'rate'){
+        if (key !== 'latest' && key !== 'date' && key !== 'population'){
             let country = key;
             let countryData = {'latest': {}};
             for (let key2 of Object.keys(data[country])) {

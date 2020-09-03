@@ -2,107 +2,104 @@ const latestDate = getLastItem(dataCollection['confirmed']['date']);
 addTextToElement(document.getElementById('footer-1'), "Data last updated: " + latestDate);
 
 
+// functions
+function drawFlats(type) {
+    let mode = document.getElementById(type + '-cases-section-select').value;
+    let smoothing = 1;
+    let data = null;
+
+    if (type === 'new') {
+        data = dataCollection[mode + '_daily'];
+        smoothing = document.getElementById(type + '-cases-smoothing-select').value;
+    } else if (type === 'aggregate') {
+        data = dataCollection[mode];
+    }
+    if (mode === 'confirmed'){
+        mode = 'cases';
+    }
+    let rateUnit = 0;
+    let population = {};
+    if (document.getElementById(type + '-cases-per-capita-toggle').checked) {
+        rateUnit = 1000000;
+        if (mode === 'cases' && type === 'aggregate'){
+            rateUnit = 1000;
+        }
+        population = dataCollection['population'];
+    }
+    mode = type + ' ' + mode;
+
+    drawChoropleth(data,
+        type + '-cases-choropleth',
+        mode + ' by country',
+        smoothing,
+        rateUnit,
+        population);
+
+    drawBarPie(data,
+        type + '-cases-bar', 'countries with the most ' + mode,
+        type + '-cases-pie', 'percentage of world total',
+        smoothing);
+}
+
+
+function drawGraphs(type) {
+    drawFlats(type);
+
+    let mode = document.getElementById(type + '-cases-section-select').value;
+    let data = null;
+    if (type === 'new') {
+        data = dataCollection[mode + '_daily'];
+        mode = type + ' Cases';
+
+        document.getElementById(type + '-cases-smoothing-select').onchange = function () {
+            drawFlats(type);
+        }
+    } else if (type === 'aggregate') {
+        data = dataCollection[mode];
+        mode = type + ' Deaths';
+    }
+
+    drawLineGraph(data,
+        mode,
+        type + '-cases-lines',
+        type + '-cases-graph-options');
+
+    document.getElementById(type + '-cases-section-select').onchange = function () {
+        drawGraphs(type);
+    }
+    document.getElementById(type + '-cases-per-capita-toggle').onchange = function () {
+        drawFlats(type);
+    }
+}
+
+
+//Action
 drawSummaryTable(dataCollection,
     'summary-table',
     'summary-table-config',
     'add-table-filter');
 
+drawGraphs('new');
 
-// Daily Data
-function drawFlatDailys(smoothing) {
-    drawChoropleth(dataCollection['confirmed_daily'],
-        'new-cases-choropleth',
-        'New Cases by Country',
-        smoothing,
-        10000);
-
-    drawBarPie(dataCollection['confirmed_daily'],
-        'new-cases-bar', 'Countries with the most new cases',
-        'new-cases-pie', 'Percentage of world total',
-        smoothing);
-
-
-    drawChoropleth(dataCollection['deaths_daily'],
-        'new-deaths-choropleth',
-        'New Deaths by Country',
-        smoothing);
-
-    drawBarPie(dataCollection['deaths_daily'],
-        'new-deaths-bar', 'Countries with the most new deaths',
-        'new-deaths-pie', 'Percentage of world total',
-        smoothing);
-}
-
-drawFlatDailys(7);
-
-
-drawLineGraph(dataCollection['confirmed_daily'],
-    'New Cases',
-    'new-cases-lines',
-    'new-cases-graph-options');
-
-drawLineGraph(dataCollection['deaths_daily'],
-    'New Deaths',
-    'new-deaths-lines',
-    'new-deaths-graph-options');
-
-
-setSelectToggler('section-daily-select',
-    ['Confirmed Cases', 'Deaths'],
-    ['section-new-cases', 'section-new-deaths']);
-
+drawGraphs('aggregate');
 
 drawMultipleAxesLineGraph(
-    [dataCollection['confirmed_daily'], dataCollection['deaths_daily'], dataCollection['recovered_daily']],
+    [dataCollection['confirmed_daily'], dataCollection['deaths_daily']],
     ['New Cases', 'New Deaths'],
     { 'New Deaths': 'y2' },
-    'daily-multi-lines',
-    'daily-multi-lines-graph-options',
-    'daily-multi-lines',
+    'new-cases-multi-lines',
+    'new-cases-multi-lines-graph-options',
+    'new-cases-multi-lines',
     0
 );
-
-
-
-// Aggregate Data
-drawChoropleth(dataCollection['confirmed'],
-    'all-cases-choropleth',
-    'Aggregate Cases by Country');
-
-drawBarPie(dataCollection['confirmed'],
-    'all-cases-bar', 'Countries with the most confirmed cases',
-    'all-cases-pie', 'Percentage of world total');
-
-drawLineGraph(dataCollection['confirmed'],
-    'Aggregate Cases',
-    'all-cases-lines',
-    'all-cases-graph-options');
-
-
-drawChoropleth(dataCollection['deaths'],
-    'all-deaths-choropleth',
-    'Aggregate Deaths by Country');
-
-drawBarPie(dataCollection['deaths'],
-    'deaths-cases-bar', 'Countries with the most total deaths',
-    'deaths-cases-pie', 'Percentage of world total');
-
-drawLineGraph(dataCollection['deaths'],
-    'Aggregate Deaths',
-    'deaths-cases-lines',
-    'deaths-cases-graph-options');
-
-setSelectToggler('section-aggregate-select',
-    ['Confirmed Cases', 'Deaths'],
-    ['section-aggregate-cases', 'section-aggregate-deaths']);
 
 drawMultipleAxesLineGraph(
     [dataCollection['recovered'], dataCollection['deaths'], dataCollection['active']],
     ['Recovered', 'Deaths', 'Active'],
     {},
-    'aggregate-multi-lines',
-    'aggregate-multi-lines-graph-options',
-    'aggreagte-multi-lines',
+    'aggregate-cases-multi-lines',
+    'aggregate-cases-multi-lines-graph-options',
+    'aggregate-cases-multi-lines',
     2
 );
 

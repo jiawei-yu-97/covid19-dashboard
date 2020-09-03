@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class='menu-item flex-last'><a href="#about">About Me</a></div>
     </div>
 
@@ -47,10 +47,15 @@
         <h1 class='text-center'>COVID-19: Interactive Data Visualization - Comparing Global Performance</h1>
         <div>
             Welcome to my COVID-19 dashboard. <br>
-            Here you can play around with different kinds of data representation and visualizations, 
+            Here you can play around with different kinds of data representation and visualizations,
             and compare the COVID-19 situation in each country using interactive tools. <br>
             Maps and line graphs are interactive. Use the mouse to scroll or drag to see more details. <br>
+<<<<<<< Updated upstream
             Customized graphs can be downloaded using the camera icon at the top of each graph (hover on a graph to see the options).
+=======
+            Customized graphs can be downloaded using the camera icon at the top of each graph (hover on a graph to see
+            the options).
+>>>>>>> Stashed changes
         </div>
         <div class='text-italics text-bold' id='footer-1'></div>
 
@@ -66,12 +71,12 @@
     <section class='bottom-border content' id='section-table'>
         <h1 class='text-center'>Summary Table</h1>
         <div class='text-center text-italics''>Some countries do not report recovery figures or delay significantly.</div>
-        <div class='text-center text-italics''>
+        <div class=' text-center text-italics''>
             Some countries report lower numbers during weekends due to health officials not working.
         </div>
 
         <section class='config-table-area flex-display center'>
-            <div class='graph-config', id='summary-table-config'>
+            <div class='graph-config' , id='summary-table-config'>
                 <h4 style='text-align: center;'>Data Filters</h4>
                 <div>
                     <button id='add-table-filter'>Add Filter</button>
@@ -85,106 +90,111 @@
     </section>
 
 
-    <section class='bottom-border content' id='section-daily'>
+    <!-- New Cases -->
+    <section class='bottom-border content' id='new-cases-section'>
         <h1 class='text-center'>Daily Change</h1>
 
-        <div class='text-bold center'>
+        <div class='text-bold center top-bottom-margin'>
             Currently displaying: &nbsp;
-            <select id='section-daily-select'></select>
+            <select id='new-cases-section-select'>
+                <option value='confirmed' selected>Confirmed Cases</option>
+                <option value='deaths'>Deaths</option>
+            </select>
         </div>
 
-        <section id='section-new-cases'>
-            <section class='plotting'>
-                <div class='flex-grow center' id='new-cases-choropleth'></div>
-            </section>
+        <section class='plotting flex-display'>
+            <div class='flex-grow' id='new-cases-choropleth'></div>
 
-            <section class='plotting flex-display'>
-                <div class='flex-grow' id='new-cases-bar'></div>
-                <div class='flex-grow' id='new-cases-pie'></div>
-            </section>
-    
-            <section class="plotting flex-display">
-                <div class='graph-config' id='new-cases-graph-options'></div>
-                <div class='flex-grow height480' id='new-cases-lines'></div>
-            </section>
+            <div class='graph-config'>
+                <div class='text-italics'>
+                    More options
+                </div>
+                <br>
+                <div>
+                    <input id='new-cases-per-capita-toggle' type='checkbox'>
+                    <label for='new-cases-per-capita-toggle'>Show per-capita data in map</label>
+                    </input>
+                </div>
+                <br>
+                <div>
+                    Rolling Average: &nbsp;
+                    <select id='new-cases-smoothing-select'>
+                        <option value='7' selected>7-day</option>
+                        <option value='1'>No</option>
+                    </select> <br>
+                    (Also applies to bar and pie.)
+                </div>
+            </div>
         </section>
 
-        <section id='section-new-deaths'>
-            <section class='plotting'>
-                <div class='flex-grow center' id='new-deaths-choropleth'></div>
-            </section>
-
-            <section class='plotting flex-display'>
-                <div class='flex-grow' id='new-deaths-bar'></div>
-                <div class='flex-grow' id='new-deaths-pie'></div>
-            </section>
-    
-            <section class="plotting flex-display">
-                <div class='graph-config' id='new-deaths-graph-options'></div>
-                <div class='flex-grow height480' id='new-deaths-lines'></div>
-            </section>
+        <section class='plotting flex-display'>
+            <div class='flex-grow' id='new-cases-bar'></div>
+            <div class='flex-grow' id='new-cases-pie'></div>
         </section>
 
+        <section class="plotting flex-display">
+            <div class='graph-config' id='new-cases-graph-options'></div>
+            <div class='flex-grow height480' id='new-cases-lines'></div>
+        </section>
 
         <h1 class='text-center'>Daily Cases and Deaths</h1>
         <section class="plotting flex-display">
-            <div class='graph-config' id='daily-multi-lines-graph-options'></div>
-            <div class='flex-grow height480' id='daily-multi-lines'></div>
+            <div class='graph-config' id='new-cases-multi-lines-graph-options'></div>
+            <div class='flex-grow height480' id='new-cases-multi-lines'></div>
         </section>
+
     </section>
 
 
-
-    <section class='bottom-border content' id='section-aggregate'>
+    <!-- Aggregate Cases -->
+    <section class='bottom-border content' id='aggregate-cases-section'>
         <h1 class='text-center'>Aggregate Data</h1>
 
         <div class='text-bold center'>
             Currently displaying: &nbsp;
-            <select id='section-aggregate-select'></select>
+            <select id='aggregate-cases-section-select'>
+                <option value='confirmed' selected>Confirmed Cases</option>
+                <option value='deaths'>Deaths</option>
+            </select>
         </div>
 
-        <section id='section-aggregate-cases'>
-            <section class='plotting'>
-                <div class='flex-grow' id='all-cases-choropleth'></div>
-            </section>
+        <section class='plotting flex-display'>
+            <div class='flex-grow' id='aggregate-cases-choropleth'></div>
 
-            <div class='plotting flex-display'>
-                <div class='flex-grow' id='all-cases-bar'></div>
-                <div class='flex-grow' id='all-cases-pie'></div>
-            </div>
-    
-            <div class="plotting flex-display">
-                <div class='graph-config' id='all-cases-graph-options'></div>
-                <div class='flex-grow height480' id='all-cases-lines'></div>
+            <div class='graph-config'>
+                <div class='text-italics'>
+                    More options
+                </div>
+                <br>
+                <div>
+                    <input id='aggregate-cases-per-capita-toggle' type='checkbox'>
+                    <label for='aggregate-cases-per-capita-toggle'>Show per-capita data in map</label>
+                    </input>
+                </div>
             </div>
         </section>
 
-        <section id='section-aggregate-deaths'>
-            <section class='plotting'>
-                <div class='flex-grow' id='all-deaths-choropleth'></div>
-            </section>
-
-            <div class='plotting flex-display'>
-                <div class='flex-grow' id='deaths-cases-bar'></div>
-                <div class='flex-grow' id='deaths-cases-pie'></div>
-            </div>
-    
-            <div class="plotting flex-display">
-                <div class='graph-config' id='deaths-cases-graph-options'></div>
-                <div class='flex-grow height480' id='deaths-cases-lines'></div>
-            </div>
+        <section class='plotting flex-display'>
+            <div class='flex-grow' id='aggregate-cases-bar'></div>
+            <div class='flex-grow' id='aggregate-cases-pie'></div>
         </section>
-        
+
+        <section class="plotting flex-display">
+            <div class='graph-config' id='aggregate-cases-graph-options'></div>
+            <div class='flex-grow height480' id='aggregate-cases-lines'></div>
+        </section>
 
         <h1 class='text-center'>Active Cases, Deaths and Recoveries</h1>
         <div class='text-center text-italics''>Some countries do not report recovery figures or delay significantly.</div>
         <section class="plotting flex-display">
-            <div class='graph-config' id='aggregate-multi-lines-graph-options'></div>
-            <div class='flex-grow height480' id='aggregate-multi-lines'></div>
+            <div class=' graph-config' id='aggregate-cases-multi-lines-graph-options'></div>
+            <div class='flex-grow height480' id='aggregate-cases-multi-lines'></div>
         </section>
+
     </section>
 
 
+    <!-- About -->
     <section class='content about' id='about'>
         <h1 class='text-center'>About Me</h1>
         A copy of my resume is <a href='Resume.pdf' target="_blank">here</a>.

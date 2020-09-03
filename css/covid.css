@@ -10,7 +10,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 1rem 0 1rem 0;
 }
 
 .plotting {
@@ -28,6 +27,7 @@
     border-width: 1px;
     border-color: var(--color-3);
     padding: 1vh;
+    max-width: 320px;
 }
 
 .table-control {
@@ -37,6 +37,10 @@
     margin-top: 1vh;
     margin-bottom: 1vh;
     border-color: var(--color-4);
+}
+
+.table-area {
+    width: 90%;
 }
 
 th {
