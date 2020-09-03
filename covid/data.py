@@ -3,11 +3,13 @@ Retrieves data from United Nations Humanitarian Data Exchange Platform
 Formats data into JSON files usable by js scripts
 """
 
-import pandas as pd
-import json
 from datetime import datetime
+import pytz
 import os
 from urllib.request import urlretrieve
+import json
+
+import pandas as pd
 
 
 ########## metadata processing ##########
@@ -218,6 +220,11 @@ def getDataCollection(filenames):
 
 def writeToJS(filenames):
     data = getDataCollection(filenames)
+    timeNow = datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('America/Toronto'))
+    localFormat = "%Y-%m-%d %H:%M:00"
+    timeStr = timeNow.strftime(localFormat)
+    data['fetched'] = timeStr
+
     jsonString = json.dumps(data)
     jsonString = 'const dataCollection = \n' + jsonString
 

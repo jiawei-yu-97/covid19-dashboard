@@ -1,5 +1,8 @@
-const latestDate = getLastItem(dataCollection['confirmed']['date']);
-addTextToElement(document.getElementById('footer-1'), "Data last updated: " + latestDate);
+const fetchedTime = dataCollection['fetched'];
+const lastestDate = getLatestDate(dataCollection['confirmed']);
+
+addTextToElement(document.getElementById('footer-1'),lastestDate);
+addTextToElement(document.getElementById('footer-2'),fetchedTime);
 
 
 // functions
@@ -14,14 +17,14 @@ function drawFlats(type) {
     } else if (type === 'aggregate') {
         data = dataCollection[mode];
     }
-    if (mode === 'confirmed'){
+    if (mode === 'confirmed') {
         mode = 'cases';
     }
     let rateUnit = 0;
     let population = {};
     if (document.getElementById(type + '-cases-per-capita-toggle').checked) {
         rateUnit = 1000000;
-        if (mode === 'cases' && type === 'aggregate'){
+        if (mode === 'cases' && type === 'aggregate') {
             rateUnit = 1000;
         }
         population = dataCollection['population'];
