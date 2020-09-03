@@ -52,14 +52,14 @@ function drawGraphs(type) {
     let data = null;
     if (type === 'new') {
         data = dataCollection[mode + '_daily'];
-        mode = type + ' Cases';
+        mode = type + ' cases';
 
         document.getElementById(type + '-cases-smoothing-select').onchange = function () {
             drawFlats(type);
         }
     } else if (type === 'aggregate') {
         data = dataCollection[mode];
-        mode = type + ' Deaths';
+        mode = type + ' deaths';
     }
 
     drawLineGraph(data,
@@ -88,8 +88,8 @@ drawGraphs('aggregate');
 
 drawMultipleAxesLineGraph(
     [dataCollection['confirmed_daily'], dataCollection['deaths_daily']],
-    ['New Cases', 'New Deaths'],
-    { 'New Deaths': 'y2' },
+    ['new cases', 'new deaths'],
+    { 'new deaths': 'y2' },
     'new-cases-multi-lines',
     'new-cases-multi-lines-graph-options',
     'new-cases-multi-lines',
@@ -98,7 +98,7 @@ drawMultipleAxesLineGraph(
 
 drawMultipleAxesLineGraph(
     [dataCollection['recovered'], dataCollection['deaths'], dataCollection['active']],
-    ['Recovered', 'Deaths', 'Active'],
+    ['recovered', 'deaths', 'active'],
     {},
     'aggregate-cases-multi-lines',
     'aggregate-cases-multi-lines-graph-options',
