@@ -90,6 +90,7 @@ function drawChoropleth(data, graphID, graphName, smoothing = 1, perCapitaBase=0
 
     if (perCapitaBase > 0){
         data = getRate(data['latest'], population, perCapitaBase);
+        data['World'] = '0.00';
 
         if (perCapitaBase === 1000) {
             perCapitaBase = '1K';
@@ -99,13 +100,13 @@ function drawChoropleth(data, graphID, graphName, smoothing = 1, perCapitaBase=0
         graphName = graphName + ', ' + 'per ' + perCapitaBase + ' population';
     } else {
         data = data['latest'];
+        data['World'] = 0;
     }
 
     if (smoothing > 1) {
         graphName +=  ', ' + smoothing + '-day average';
     }
 
-    data['World'] = 0;
     data = objToArray(data);
     let headerNames = ['country', 'cases'];
     tabularData = new TypedTabularData(data, headerNames);
