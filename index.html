@@ -19,29 +19,30 @@
     <script src="covid/data/data-collection.js" defer></script>
     <script src="covid/scripts/functions.js" defer></script>
     <script src="covid/scripts/dashboard.js" defer></script>
-    <title>COVID Dashboard - Jiawei Yu</title>
+    <title>COVID Dashboard - Charlie Yu</title>
 </head>
 
 <body>
     <div class='nav-menu'>
+        <div class='menu-item'><a href="https://jiawei-yu-97.github.io/index.html">About Me</a></div>
+
         <div class='dropdown'>
-            <div class='menu-item dropdown-btn'><a href="#dashboard-header">Dashboard</a></div>
+            <div class='menu-item dropdown-btn'><a href="index.html">Covid Dashboard</a></div>
 
             <div class='dropdown-content'>
                 <div class='menu-item'>
-                    <a href="#section-table">Table</a>
+                    <a href="index.html#section-table">Table</a>
                 </div>
                 <div class='menu-item'>
-                    <a href="#new-cases-section">New Cases</a>
+                    <a href="index.html#new-cases-section">New Cases</a>
                 </div>
                 <div class='menu-item'>
-                    <a href="#aggregate-cases-section">Cumulative</a>
+                    <a href="index.html#aggregate-cases-section">Cumulative</a>
                 </div>
             </div>
         </div>
-        
-        <div class='menu-item flex-last'><a href="about.html">About Me</a></div>
     </div>
+
 
     <section class='bottom-border content' id='dashboard-header'>
         <h1 class='text-center'>COVID-19: Interactive Data Visualization - Comparing Global Performance</h1>
@@ -185,12 +186,12 @@
         <div class='text-center text-italics''>Some countries do not report recovery figures or delay significantly.</div>
         <section class="plotting flex-display">
             <div class=' graph-config' id='aggregate-cases-multi-lines-graph-options'></div>
-        <div class='flex-grow height480' id='aggregate-cases-multi-lines'></div>
-    </section>
+            <div class='flex-grow height480' id='aggregate-cases-multi-lines'></div>
+        </section>
 
     </section>
 
-
+    
     <!-- About -->
     <section class='content about' id='about'>
         <a href='mailto:jiawei.yu@mail.utoronto.ca'><img src='pictures/email.png'
