@@ -222,7 +222,7 @@ def get_data_collection(filenames):
     return data
 
 
-def write_to_JSON(filenames):
+def write_to_JSON(data_dir, filenames):
     data = get_data_collection(filenames)
     timeNow = datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('America/Toronto'))
     localFormat = "%Y-%m-%d %H:%M:00"
@@ -253,5 +253,5 @@ if __name__ == "__main__":
     urlretrieve(recovered_url, data_dir + 'recovered.csv')
 
     alias, chinese, population = get_metadata_dict(filename=data_dir+'metadata.csv')
-    write_to_JSON(['confirmed', 'deaths', 'recovered', 'active'])
+    write_to_JSON(data_dir, ['confirmed', 'deaths', 'recovered', 'active'])
 
