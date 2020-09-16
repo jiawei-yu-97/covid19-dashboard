@@ -3,4 +3,4 @@ covid/data/deaths.csv
 covid/data/recovered.csv
 covid/data/data-collection.js
 TODOs.txt
-*.xml
+.idea/*

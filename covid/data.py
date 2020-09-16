@@ -12,28 +12,6 @@ import json
 import pandas as pd
 
 
-########## metadata processing ##########
-def get_metadata_dict(filename):
-    df = pd.read_csv(filename, encoding='utf-8')
-    country_lst, alias_lst, chinese_lst, population_lst = df['Country/Region'], df['Alias'], df['Chinese'], df['Population']
-
-    alias = {country_lst[i]: alias_lst[i] for i in range(len(df))}
-    chinese = {country_lst[i]: chinese_lst[i] for i in range(len(df))}
-
-    population = {}
-    for i in range(len(population_lst)):
-        pop = population_lst[i]
-        for key in [alias_lst[i], chinese_lst[i]]:
-            if pop.endswith('m'):
-                population[key] = float(pop[:-1]) * 1000000
-            elif pop.endswith('b'):
-                population[key] = float(pop[:-1]) * 1000000000
-            else:
-                population[key] = float(pop)
-
-    return alias, chinese, population
-
-
 ########## helper functions ##########
 
 # determines if a column represents a date
@@ -64,11 +42,11 @@ def combine_country_province(province, country):
 
 def smooth_series(data, halfWindow=3):
     """
-        Smooths a data series using unweighted rolling average
-        Rolling window defaults to 7 days
-        :param data: a list-like object
-        :param halfWindow: length (number of days) of one side of the rolling window
-        """
+    Smooths a data series using unweighted rolling average
+    Rolling window defaults to 7 days
+    :param data: a list-like object
+    :param halfWindow: length (number of days) of one side of the rolling window
+    """
     smooths = []
     for i in range(len(data)):
         leftIndex = max(0, i-halfWindow)
@@ -79,6 +57,31 @@ def smooth_series(data, halfWindow=3):
 
 
 ########## Preprocessing ##########
+"""
+Raw CSV files are first processed into dataframes that's easier to work with,
+then the dataframes are transformed into dictionary objects, which are written to JSON files to be used by the app
+"""
+
+def get_metadata_dict(filename):
+    df = pd.read_csv(filename, encoding='utf-8')
+    country_lst, alias_lst, chinese_lst, population_lst = df['Country/Region'], df['Alias'], df['Chinese'], df['Population']
+
+    alias = {country_lst[i]: alias_lst[i] for i in range(len(df))}
+    chinese = {country_lst[i]: chinese_lst[i] for i in range(len(df))}
+
+    population = {}
+    for i in range(len(population_lst)):
+        pop = population_lst[i]
+        for key in [alias_lst[i], chinese_lst[i]]:
+            if pop.endswith('m'):
+                population[key] = float(pop[:-1]) * 1000000
+            elif pop.endswith('b'):
+                population[key] = float(pop[:-1]) * 1000000000
+            else:
+                population[key] = float(pop)
+
+    return alias, chinese, population
+
 
 # returns a preprocessed dataframe
 def df_preprocess(df):
@@ -105,7 +108,6 @@ def df_preprocess(df):
     for country in countries[1:]:
         total += new_df[country]
     new_df['World'] = total
-
 
     return new_df
 
@@ -195,7 +197,9 @@ def df_to_dict(df):
     return ret
 
 
-def getDataCollection(filenames):
+# process confirmed cases, deaths and recovered into dictionaries
+# then return a dict containing the processed dicts, along with population information
+def get_data_collection(filenames):
     data = {'population': {}}
     for file_name in filenames:
         print('Processing {}'.format(file_name))
@@ -218,8 +222,8 @@ def getDataCollection(filenames):
     return data
 
 
-def writeToJS(filenames):
-    data = getDataCollection(filenames)
+def write_to_JSON(filenames):
+    data = get_data_collection(filenames)
     timeNow = datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone('America/Toronto'))
     localFormat = "%Y-%m-%d %H:%M:00"
     timeStr = timeNow.strftime(localFormat)
@@ -238,20 +242,16 @@ if __name__ == "__main__":
     if not os.path.exists(data_dir):
         os.mkdir(data_dir)
 
-    print('Retriveing data.')
-
     # data retrived from https://data.humdata.org/dataset/novel-coronavirus-2019-ncov-cases
     confirmed_url = 'https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_global.csv&filename=time_series_covid19_confirmed_global.csv'
-    urlretrieve(confirmed_url, data_dir + 'confirmed.csv')
-
     deaths_url = 'https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_deaths_global.csv&filename=time_series_covid19_deaths_global.csv'
-    urlretrieve(deaths_url, data_dir + 'deaths.csv')
-
     recovered_url = 'https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_recovered_global.csv&filename=time_series_covid19_recovered_global.csv'
+
+    print('Retriveing data.')
+    urlretrieve(confirmed_url, data_dir + 'confirmed.csv')
+    urlretrieve(deaths_url, data_dir + 'deaths.csv')
     urlretrieve(recovered_url, data_dir + 'recovered.csv')
 
-
     alias, chinese, population = get_metadata_dict(filename=data_dir+'metadata.csv')
-
-    writeToJS(['confirmed', 'deaths', 'recovered', 'active'])
+    write_to_JSON(['confirmed', 'deaths', 'recovered', 'active'])
 
