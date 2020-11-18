@@ -344,7 +344,6 @@ class LineGraph extends PlotlyGraph {
         let layout = super.defaultLayout();
         layout['hovermode'] = 'closest';
         layout['yaxis'] = {
-            autorange: true,
             type: 'linear'
         }
         layout['xaxis'] = {
@@ -409,10 +408,11 @@ class LineGraph extends PlotlyGraph {
 
 
 class MultipleAxesLineGrpah extends LineGraph {
-    constructor(graphID, data, axes, mode = 'lines', colors = {}) {
+    constructor(graphID, data, axes, types, mode = 'lines', colors = {}) {
         super(graphID, data, mode, colors);
 
         this.axes = axes;
+        this.types = types;
         this.defaultColors = ['blue','red','green'];
     }
 
@@ -432,7 +432,7 @@ class MultipleAxesLineGrpah extends LineGraph {
         let trace = {
             x: this.data.dates,
             y: this.data.data[dataName].series[countryName],
-            mode: this.mode,
+            //mode: this.mode,
             marker: {
                 color: this.getColor(dataName),
                 size: 5
@@ -444,6 +444,12 @@ class MultipleAxesLineGrpah extends LineGraph {
         } else if (dataName in this.axes){
             trace['yaxis'] = this.axes[dataName];
         }
+        if (dataName in this.types){
+            trace['type'] = this.types[dataName];
+            trace['opacity'] = 0.25;
+        } else{
+            trace['mode'] = this.mode;
+        }
         
         return trace;
     }
@@ -451,9 +457,22 @@ class MultipleAxesLineGrpah extends LineGraph {
     defaultLayout() {
         let layout = super.defaultLayout();
         layout['yaxis2'] = {
-            overlaying: 'y',
-            side: 'right'
+            overlaying: 'y1',
+            side: 'right',
+            showgrid: false,
+            zeroline: false
         };
+        layout['yaxis'] = {
+            side: 'left',
+            showgrid: true,
+            zeroline: false
+        };
+        layout['legend'] = {
+            yanchor:"top",
+            y:0.99,
+            xanchor:"left",
+            x:0.01
+        }
         return layout;
     }
 

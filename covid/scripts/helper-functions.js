@@ -147,7 +147,23 @@ function sliceByIndices(array, indices){
 }
 
 
-function smoothSeries(series, window) {
+function getRatios(array1, array2){
+    if (array1.length != array2.length){
+        throw Error('getRatios: the arrays need to have the same lengths');
+    }
+    let ratios = [];
+    for (let i = 0; i < array1.length; i++){
+        if (array2[i] == 0){
+            ratios.push(0);
+        } else{
+            ratios.push(array1[i] / array2[i])
+        }
+    }
+    return ratios;
+}
+
+
+function smoothSeries(series, window, flooring = true) {
     let halfWindow = Math.floor((window) / 2);
     let smooths = [];
     for (let i = 0; i < series.length; i++) {
@@ -161,7 +177,11 @@ function smoothSeries(series, window) {
             }
         }
         let smoothed = sum(series.slice(leftIndex, rightIndex)) / (rightIndex - leftIndex);
-        smooths.push(Math.floor(smoothed));
+        if (flooring){
+            smooths.push(Math.floor(smoothed));
+        } else {
+            smooths.push(smoothed);
+        }
     }
     return smooths;
 }
@@ -235,4 +255,28 @@ function cmpStr(a, b){
 
 function cmpPerct(a, b){
     return cmpNumber(PerctToFloat(a), PerctToFloat(b));
+}
+
+
+/**********
+ Data functions
+ *********/
+function findRatesFromSeries(data1, data2){
+    let dates1 = data1['date'];
+    let dates2 = data2['date'];
+    if (!arrayEqual(dates1, dates2)){
+        throw Error('series1 and series2 need to have the same dates');
+    }
+
+    let newData = {};
+    newData['date'] = dates1;
+    for (let key of Object.keys(data1)){
+        if (key === 'date' || key === 'latest' || key === 'population' || !key in data2){
+            continue;
+        }
+        let array1 = data1[key]['total'];
+        let array2 = data2[key]['total'];
+        newData[key] = {'total': getRatios(array1, array2)};
+    }
+    return newData;
 }

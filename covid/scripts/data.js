@@ -199,9 +199,14 @@ class TypedTabularData extends TabularData{
 TIME SERIES DATA
 */
 class TimeSeriesData extends Data {
-    constructor(data, validate=true){
+    constructor(data, flooring, validate=true){
         super(data, validate);
         this.setData(data, false);
+        if (flooring == undefined || flooring){
+            this.flooring = true;
+        } else{
+            this.flooring = false;
+        }
     }
 
     get seriesNames() {
@@ -233,7 +238,7 @@ class TimeSeriesData extends Data {
         }
     }
 
-    static fromProcessedDict(data, validate=true){
+    static fromProcessedDict(data, flooring = true, validate=true){
         if (validate){
             this.validateProcessedDict(data);
         }
@@ -246,7 +251,7 @@ class TimeSeriesData extends Data {
             let countryTotal = data[key]['total'];
             newData[key] = countryTotal;
         }
-        return new TimeSeriesData(newData, true);
+        return new TimeSeriesData(newData, flooring, true);
     }
 
     copy() {
@@ -254,7 +259,7 @@ class TimeSeriesData extends Data {
         for (let key of Object.keys(this.series)){
             newData[key] = this.series[key];
         }
-        return new TimeSeriesData(newData, true);
+        return new TimeSeriesData(newData, this.flooring, true);
     }
 
     validate(data) {
@@ -301,16 +306,16 @@ class TimeSeriesData extends Data {
         for (let country of series){
             newData[country] = this.series[country];
         }
-        return new TimeSeriesData(newData, false);
+        return new TimeSeriesData(newData, this.flooring, false);
     }
 
     smoothSeries(smoothing){
         let newData = {};
         newData['date'] = this.dates;
         for (let country of Object.keys(this.series)){
-            newData[country] = smoothSeries(this.series[country], smoothing);
+            newData[country] = smoothSeries(this.series[country], smoothing, this.flooring);
         }
-        return new TimeSeriesData(newData, false);
+        return new TimeSeriesData(newData, this.flooring, false);
     }
 }
 
@@ -323,12 +328,12 @@ class MultiTimeSeriesData extends TimeSeriesData {
         }
     }
 
-    static fromProcessedDict(dataArray, dataNames, validate=true){
+    static fromProcessedDict(dataArray, dataNames, floorings, validate=true){
         let data = {};
         for (let i=0; i<dataNames.length; i++){
-            data[dataNames[i]] = TimeSeriesData.fromProcessedDict(dataArray[i]);
+            data[dataNames[i]] = TimeSeriesData.fromProcessedDict(dataArray[i], floorings[dataNames[i]]);
         }
-        return new MultiTimeSeriesData(data);
+        return new MultiTimeSeriesData(data, validate);
     }
 
     validate(data){

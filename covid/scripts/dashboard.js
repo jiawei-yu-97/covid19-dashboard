@@ -89,10 +89,12 @@ drawGraphs('new');
 drawGraphs('aggregate');
 
 drawMultipleAxesLineGraph(
-    'new cases and deaths per day',
+    'new cases and new deaths per day',
     [dataCollection['confirmed_daily'], dataCollection['deaths_daily']],
-    ['new cases', 'new deaths'],
-    { 'new deaths': 'y2' },
+    ['daily cases', 'daily deaths'],
+    { 'daily deaths': 'y2' },
+    { 'daily deaths': 'bar' },
+    {},
     'new-cases-multi-lines',
     'new-cases-multi-lines-graph-options',
     'new-cases-multi-lines',
@@ -103,6 +105,8 @@ drawMultipleAxesLineGraph(
     "cumulative active, deaths and recovered cases",
     [dataCollection['recovered'], dataCollection['deaths'], dataCollection['active']],
     ['recovered', 'deaths', 'active'],
+    {},
+    {},
     {},
     'aggregate-cases-multi-lines',
     'aggregate-cases-multi-lines-graph-options',

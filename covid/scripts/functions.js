@@ -22,12 +22,12 @@ function drawLineGraph(data, dataName, lineGraphID, graphOptionsID) {
 }
 
 
-function drawMultipleAxesLineGraph(title, dataArray, dataNames, axes, lineGraphID, graphOptionsID, controlName, tableColumnIndex) {
+function drawMultipleAxesLineGraph(title, dataArray, dataNames, axes, types, floorings, lineGraphID, graphOptionsID, controlName, tableColumnIndex) {
     let tabularData = new TypedTabularData(objToArray(dataArray[tableColumnIndex]['latest']), ['country', dataNames[tableColumnIndex]]);
 
-    let lineGraph = new MultipleAxesLineGrpah(lineGraphID, null, axes, 'lines');
+    let lineGraph = new MultipleAxesLineGrpah(lineGraphID, null, axes, types,'lines');
     lineGraph.setLayout({ title: title});
-    let multiTimeSeriesData = MultiTimeSeriesData.fromProcessedDict(dataArray, dataNames);
+    let multiTimeSeriesData = MultiTimeSeriesData.fromProcessedDict(dataArray, dataNames, floorings);
 
     let graphOptionsNode = getNode(graphOptionsID);
     while (graphOptionsNode.firstChild) {
