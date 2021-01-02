@@ -17,17 +17,14 @@ import pandas as pd
 # determines if a column represents a date
 # uses the observation that from the original csv, all date columns end with '20'
 def is_date(col):
-    return col.endswith('20')
+    return col.endswith('20') or col.endswith('21')
 
 
 # converts a date column title to a standard format (for example, '2020-04-01')
 def process_date_str(col):
     if is_date(col):
-        if col.startswith('20'):
-            month, day = col.split('-')[0][2:], col.split('-')[1]
-        else:
-            month, day = col.split('/')[0], col.split('/')[1]
-        return str(datetime(2020, int(month), int(day)))[:10]
+        month, day, year = col.split('/')
+        return str(datetime(2000 + int(year), int(month), int(day)))[:10]
     else:
         return col
 
