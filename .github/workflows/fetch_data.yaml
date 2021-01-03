@@ -17,9 +17,12 @@ jobs:
           persist-credentials: false
       - run: pip3 install pandas
       - run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "github-actions"
           git pull
+      - run: |
           python3 covid/data.py
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
           git commit -m "Add changes" -a
           git push
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
