@@ -18,8 +18,8 @@ jobs:
       - run: pip3 install pandas
       - run: python3 covid/data.py
       - run: 
-          git config user.email "github-actions@github.com"
-          git config user.name "github-actions"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git commit -m "Add changes" -a
       
       - name: Push changes
