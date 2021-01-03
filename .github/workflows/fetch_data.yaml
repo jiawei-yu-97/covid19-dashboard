@@ -12,7 +12,10 @@ jobs:
   fetch_data:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.1.0
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
       - run: pip3 install pandas
       - run: python3 covid/data.py
 
