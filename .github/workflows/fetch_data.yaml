@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
+      - run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "Add changes" -a
