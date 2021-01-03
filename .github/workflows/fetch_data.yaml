@@ -17,8 +17,8 @@ jobs:
           persist-credentials: false
       - run: pip3 install pandas
       - run: |
-        git pull
-        python3 covid/data.py
+          git pull
+          python3 covid/data.py
 
       - name: Commit files
         run: |
