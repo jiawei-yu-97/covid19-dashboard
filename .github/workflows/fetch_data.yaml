@@ -16,15 +16,14 @@ jobs:
         with:
           persist-credentials: false
       - run: pip3 install pandas
-      - run: |
+      - run: python3 covid/data.py
+      - run: 
           git config user.email "github-actions@github.com"
           git config user.name "github-actions"
-          git pull
-      - run: |
-          python3 covid/data.py
           git commit -m "Add changes" -a
       
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: 'master'
