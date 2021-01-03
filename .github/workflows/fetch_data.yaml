@@ -23,6 +23,9 @@ jobs:
       - run: |
           python3 covid/data.py
           git commit -m "Add changes" -a
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
           git push
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
