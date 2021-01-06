@@ -98,7 +98,8 @@ drawMultipleAxesLineGraph(
     'new-cases-multi-lines',
     'new-cases-multi-lines-graph-options',
     'new-cases-multi-lines',
-    0
+    0,
+    logControl = false
 );
 
 drawMultipleAxesLineGraph(

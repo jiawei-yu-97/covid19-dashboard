@@ -22,7 +22,9 @@ function drawLineGraph(data, dataName, lineGraphID, graphOptionsID) {
 }
 
 
-function drawMultipleAxesLineGraph(title, dataArray, dataNames, axes, types, floorings, lineGraphID, graphOptionsID, controlName, tableColumnIndex) {
+function drawMultipleAxesLineGraph(title, dataArray, dataNames, axes, 
+    types, floorings, lineGraphID, graphOptionsID, controlName, tableColumnIndex,
+    logControl = true) {
     let tabularData = new TypedTabularData(objToArray(dataArray[tableColumnIndex]['latest']), ['country', dataNames[tableColumnIndex]]);
 
     let lineGraph = new MultipleAxesLineGrpah(lineGraphID, null, axes, types,'lines');
@@ -34,7 +36,9 @@ function drawMultipleAxesLineGraph(title, dataArray, dataNames, axes, types, flo
         graphOptionsNode.removeChild(graphOptionsNode.firstChild);
     }
     let combinedControl = new TimeSeriesCombinedControl(lineGraph, multiTimeSeriesData, tabularData, graphOptionsNode, controlName);
-    combinedControl.makeLogControl('Use Log Scale');
+    if (logControl){
+        combinedControl.makeLogControl('Use Log Scale');
+    }
     combinedControl.makeSmoothingControl('Smoothing: ');
 
     graphOptionsNode.appendChild(document.createElement('br'));
